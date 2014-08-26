@@ -1,0 +1,51 @@
+<?php
+
+require_once('Core.php');
+
+$Email=CleanUp($_GET[Email]);
+$PassWord=CleanUp($_GET[PassWord]);
+$PhoneID=CleanUp($_GET[PhoneID]);
+
+//密码加盐
+$PassWord=MD5Saltly($PassWord);
+
+$Find=false;
+
+$mysql = new SaeMysql();
+$result = $mysql->getData("SELECT * FROM PSS_User WHERE Email='$Email' AND PassWord='$PassWord'");
+
+if(!empty($result))
+{
+    $Find=true;
+
+    foreach ($result as $row)
+    {
+        $XML = simplexml_load_string(base64_decode($row['XMLData']));
+
+        if(!empty($XML))
+        {
+            echo "SUCC!";
+
+            foreach($XML->Unit as $a) 
+            { 
+                echo "#Unit#@".$a->Domin."#@#".$a->PWDPool."#@#".$a->Length."#@#".$a->MD5Times."#@#".$a->LockCPU."#@#".$a->LockHard."#@#".$a->LockUSB."@#Unit#";
+            }
+
+            foreach ($XML->Setting as $b)
+            {
+                echo "#Setting#@".$b->TimeStamp."#@#".$b->Length_Default."#@#".$b->MD5Times_Default."#@#".$b->LockCPU_Default."#@#".$b->LockHard_Default."#@#".$b->LockUSB_Default."#@#".$row['CPU_ID']."#@#".$row['Hard_ID']."#@#".$row['USB_ID']."@#Setting#";
+            }
+        }
+
+        $mysql->runSql("UPDATE PSS_User SET LastLoginPhone='$PhoneID' where (Email='$Email' AND PassWord='$PassWord')");
+        Write2Log("$Email","移动终端下载数据");
+    }
+}
+
+if(!$Find)
+{
+    Write2Log("$Email","移动终端登录失败 尝试密码:".$PassWord);
+    echo "Wrong UserName or Password!";
+}
+
+?>

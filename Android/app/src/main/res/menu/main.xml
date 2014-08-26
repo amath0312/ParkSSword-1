@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="codeeer.parkssword_android.app.MainActivity" >
+
+    <item
+        android:title="添加"
+        app:showAsAction="never"
+        android:onClick="DoAddDomin"/>
+    <item
+        android:title="@string/synchrodata"
+        app:showAsAction="never"
+        android:onClick="DoSynchro"/>
+    <item
+        android:title="@string/logoff"
+        app:showAsAction="never"
+        android:onClick="Logoff"/>
+</menu>

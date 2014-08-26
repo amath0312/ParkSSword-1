@@ -1,0 +1,266 @@
+<?php
+
+require_once('Core.php');
+
+//$Domin=CleanUp($_GET[Domin]);
+//$WeixinID=CleanUp($_GET[WeixinID]);
+
+ConnectDB();
+
+//echo CreatTask($Domin,$WeixinID);
+
+//生成PSS序列
+function CreatTask($Domin,$WeixinID)
+{
+    //转化为小写
+    $Domin=strtolower($Domin);
+
+    $XMLSource="";
+
+    //硬件信息
+    $CPUID="";
+    $HardID="";
+    $USBID="";
+
+    $result = mysql_query("SELECT * FROM PSS_User where Weixin='$WeixinID'");
+    $Has=false;
+    while($row = mysql_fetch_array($result))
+    {
+        $Has=true;
+
+        $XMLSource = base64_decode($row['XMLData']);
+
+        $CPUID = $row['CPU_ID'];
+        $HardID = $row['Hard_ID'];
+        $USBID = $row['USB_ID'];
+    }
+
+    if($Has)
+    {
+        $XML = simplexml_load_string($XMLSource);
+
+        //处理配置节点
+        $TimeStamp = $XML->Setting->TimeStamp[0];
+
+        $Length_Manual = $XML->Setting->Length_Manual[0];
+        $MD5Times_Manual = $XML->Setting->MD5Times_Manual[0];
+        $LockCPU_Manual = $XML->Setting->LockCPU_Manual[0];
+        $LockHard_Manual = $XML->Setting->LockHard_Manual[0];
+        $LockUSB_Manual = $XML->Setting->LockUSB_Manual[0];
+
+        $Length_Default = $XML->Setting->Length_Default[0];
+        $MD5Times_Default = $XML->Setting->MD5Times_Default[0];
+        $LockCPU_Default = $XML->Setting->LockCPU_Default[0];
+        $LockHard_Default = $XML->Setting->LockHard_Default[0];
+        $LockUSB_Default = $XML->Setting->LockUSB_Default[0];
+        $LoginEmail = $XML->Setting->LoginEmail[0];
+
+        //判定域名是否存在于
+        $IsInManualLst=false;
+        //处理Unit节点
+        foreach($XML->Unit as $a) 
+        { 
+            if(!strcasecmp($Domin,$a->Domin))
+            {
+                $PWDPool=$a->PWDPool;
+                $Length=$a->Length;
+                $MD5Times=$a->MD5Times;
+                $LockCPU=$a->LockCPU;
+                $LockHard=$a->LockHard;
+                $LockUSB=$a->LockUSB;
+
+                //执行根据手动列表生成密码
+                return CreatManual($Domin,$CPUID,$HardID,$USBID,$Length,$MD5Times,$LockCPU,$LockHard,$LockUSB,$PWDPool);
+
+                $IsInManualLst=true;
+            }
+        }
+        
+        if(!$IsInManualLst)
+        {
+            //执行根据默认设定生成密码
+            return CreatStandard($Domin,$CPUID,$HardID,$USBID,$Length_Default,$MD5Times_Default,$LockCPU_Default,$LockHard_Default,$LockUSB_Default);
+        }
+    }
+    else
+    {
+        return "[您的微信没有绑定ParkSSword帐号]";
+    }
+}
+
+//密文生成算法（标准方式）
+function CreatStandard($SourceText,$CPU,$HD,$USB,$Length,$MD5Times,$LockCPU,$LockHard,$LockUSB)
+{
+    $TempStr = $SourceText;
+
+    for ($i = 0; $i < 16; $i++)
+    {
+        $TempStr = strtoupper(substr(md5($TempStr),8,16));
+    }
+
+    $MixStr=$TempStr;
+    if($LockCPU=="True")$MixStr.=$CPU;
+    if($LockHard=="True")$MixStr.=$HD;
+    if($LockUSB=="True")$MixStr.=$USB;
+
+    $Temp01=strtoupper(substr(md5($MixStr),0,$Length));
+    $Temp02=strtolower(substr(md5($Temp01.$MixStr),0,$Length));
+    $TempStr=$Temp01.":".$Temp02;
+
+    //测试输出
+    //echo "CPU->".$CPU." HD->".$HD." USB->".$USB."<br>";
+    //echo "MixStr->".$MixStr." Temp01->".$Temp01." Temp02->".$Temp02."<br>";
+
+    return $TempStr;
+}
+
+//密文生成算法（手动方式）
+function CreatManual($SourceText,$CPU,$HD,$USB,$Length,$MD5Times,$LockCPU,$LockHard,$LockUSB,$PWDsPool)
+{
+    //处理硬件信息
+    if($LockCPU=="False")$CPU=null;
+    if($LockHard=="False")$HD=null;
+    if($LockUSB=="False")$USB=null;
+
+    $TempStr = $SourceText;
+
+    for ($i = 0; $i < 16; $i++)
+    {
+        $TempStr = strtoupper(substr(md5($TempStr),8,16));
+    }
+
+    $SourceString=$TempStr;
+
+    //乱序
+    $PWDsPool=FlyTheWords($PWDsPool);
+
+
+    $CreatStr="";
+
+    //把序列号参数进行加密运算
+    $MD5Temp=strtoupper(substr(md5($SourceString.$CPU),8,16));
+    $MD5Temp=strtoupper(substr(md5($MD5Temp.$HD),8,16));
+    $MD5Temp=strtoupper(substr(md5($MD5Temp.$USB),8,16));
+
+    for ($i = 0; $i < $MD5Times; $i++)
+    {
+        $MD5Temp=strtoupper(substr(md5($MD5Temp),8,16));
+    }
+
+    $LastGet = -1;//记录上一次提取的，比对，避免重复
+    $PlusTwoEveryTime = 1;//每次加2，用以打乱生成
+
+    for ($i = 0; $i < $Length + 16 ; )
+    {
+        $MD5Temp=strtoupper(substr(md5($MD5Temp),8,16));
+        $PlusTwoEveryTime += 2;
+
+        $FinalNum = HasNumber($MD5Temp,$PlusTwoEveryTime);
+
+        if($FinalNum != -1 && $LastGet != $MD5Temp[$FinalNum])
+        {
+            $CreatStr.=$PWDsPool[$MD5Temp[$FinalNum]];
+            $LastGet=$MD5Temp[$FinalNum];
+            $i++;
+        }
+    }
+
+    $ReadyStr="";
+
+    if(HasNumber($CreatStr,0)!=-1)$ReadyStr.=$PWDsPool[HasNumber($PWDsPool,0)];
+    if(HasLetter($CreatStr)!=-1)$ReadyStr.=$PWDsPool[HasLetter($PWDsPool)];
+    if(HasCharacter($CreatStr)!=-1)$ReadyStr.=$PWDsPool[HasCharacter($PWDsPool)];
+
+    $ReadyStr.=$CreatStr;
+
+    //测试输出
+    return substr($ReadyStr,0,$Length);
+}
+
+//乱序算法
+function FlyTheWords($PWDs)
+{
+    $FinalStr="";
+
+    $RandNum = array(
+            12,34,56,78,23,45,67,89,13,24, 
+            35,46,57,68,79,80,14,25,36,47, 
+            58,69,70,98,87,76,65,54,43,32,
+            11,22,33,44,55,66,77,88,99,0,
+            17,28,39,40,51,62,73,84,95,7,
+            74,83,48,96,36,26,96,25,85,1,
+            97,43,98,37,96,13,63,74,84,51,
+            85,25,96,24,87,24,98,23,64,73,
+            18,02,48,93,93,17,39,45,9,2,
+            95,24,12,16,19,24,84,45,29,20,
+        );
+
+    for ($i = 0; $i < (160 / strlen($PWDs) + 1); $i++)
+    {
+        $FinalStr.=$PWDs;
+    }
+
+    $Temp=substr($FinalStr,50,100);
+
+    $SndTemp=null;
+
+    for ($i = 0; $i < count($RandNum); $i++)
+    {
+        $SndTemp.=$Temp[$RandNum[$i]];
+    }
+
+    return $SndTemp;
+}
+
+//判定字符串中是否包含数字
+function HasNumber($Source,$FirstIndex)
+{
+    $Has = -1;
+    if($FirstIndex > strlen($Source))
+    {
+        $FirstIndex=$FirstIndex-floor($FirstIndex/strlen($Source))*strlen($Source);
+    }
+
+    for($i=$FirstIndex;$i<strlen($Source);$i++)
+    {
+        if(is_numeric($Source[$i]))
+        {
+            $Has = $i;
+            break;
+        }
+    }
+    return $Has;
+}
+
+//判定字符串中是否包含字母
+function HasLetter($Source)
+{
+    $Has = -1;
+    for($i=0;$i<strlen($Source);$i++)
+    {
+        if(preg_match('/[A-Za-z]/',$Source[$i]))
+        {
+            $Has = $i;
+            break;
+        }
+    }
+    return $Has;
+}
+
+//判定字符串中是否包含特殊字符
+function HasCharacter($Source)
+{
+    $Has = -1;
+    for($i=0;$i<strlen($Source);$i++)
+    {
+        if(is_numeric($Source[$i]) || preg_match('/[A-Za-z]/',$Source[$i]))
+        {
+            continue;
+        }
+        $Has =$i;
+        break;
+    }
+    return $Has;
+}
+
+?>

@@ -1,0 +1,218 @@
+<?php
+
+require_once('Core.php');
+require_once('CreatPSS.php');
+
+/**
+  * wechat php test
+  */
+
+//define your token
+define("TOKEN", "PSSDevelop");
+$wechatObj = new wechatCallbackapiTest();
+$wechatObj->responseMsg();
+
+class wechatCallbackapiTest
+{
+    public function valid()
+    {
+        $echoStr = $_GET["echostr"];
+
+        //valid signature , option
+        if($this->checkSignature()){
+            echo $echoStr;
+            exit;
+        }
+    }
+
+    public function responseMsg()
+    {
+        //get post data, May be due to the different environments
+        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+
+        //extract post data
+        if (!empty($postStr)){
+                
+                $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+                $fromUsername = $postObj->FromUserName;
+                $toUsername = $postObj->ToUserName;
+                $keyword = trim($postObj->Content);
+                $time = time();
+                $textTpl = "<xml>
+                            <ToUserName><![CDATA[%s]]></ToUserName>
+                            <FromUserName><![CDATA[%s]]></FromUserName>
+                            <CreateTime>%s</CreateTime>
+                            <MsgType><![CDATA[%s]]></MsgType>
+                            <Content><![CDATA[%s]]></Content>
+                            <FuncFlag>0</FuncFlag>
+                            </xml>";             
+                if(!empty( $keyword ))
+                {
+                    //ParkSSword绑定
+                    if(strtoupper(substr($keyword,0,3))=="BD=")
+                    {
+                        Write2Log(WhoUseThisWeixin($fromUsername),"微信绑定指令提交");
+
+                        $msgType = "text";
+                        //$contentStr = "ParkSSword绑定服务维护中...";
+                        $contentStr = $this->bundling_Weixin($fromUsername,strtoupper(substr($keyword,3)));
+                        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+                        echo $resultStr;
+                    }
+                    //
+                    elseif(strtoupper(substr($keyword,0,3))=="MM=")
+                    {
+                        Write2Log(WhoUseThisWeixin($fromUsername),"微信PSS请求提交");
+
+                        $msgType = "text";
+                        //$contentStr = "ParkSSword密码生成服务维护中...";
+                        $contentStr = $this->PSS_Request($fromUsername,strtoupper(substr($keyword,3)));
+                        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+                        echo $resultStr;
+                    }
+                    //未知输入
+                    else
+                    {
+                        Write2Log(WhoUseThisWeixin($fromUsername),"微信提交:".CleanUp($keyword));
+
+                        $msgType = "text";
+                        $contentStr = "[命令请求前缀]\n 请求ParkSSword密码 -> MM=\n绑定ParkSSword服务 -> BD=";
+                        $resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+                        echo $resultStr;
+                    }
+                }else{
+                    echo "Input something...";
+                }
+
+        }else {
+            echo "";
+            exit;
+        }
+    }
+        
+    private function checkSignature()
+    {
+        $signature = $_GET["signature"];
+        $timestamp = $_GET["timestamp"];
+        $nonce = $_GET["nonce"];    
+                
+        $token = TOKEN;
+        $tmpArr = array($token, $timestamp, $nonce);
+        sort($tmpArr);
+        $tmpStr = implode( $tmpArr );
+        $tmpStr = sha1( $tmpStr );
+        
+        if( $tmpStr == $signature ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //检测微信帐号是否存在于Ban库
+    private function CheckAndSettingBanLst($fromUsername)
+    {
+        $Find=false;
+        $Band=false;
+
+        //验证Ban库
+        $result = mysql_query("SELECT * FROM WeChatRequire WHERE User='$fromUsername'");
+
+        while($row = mysql_fetch_array($result))
+        {
+            $Find=true;
+            if($row['WrongTime']>=5)
+            {
+                $Band=true;
+            }
+        }
+
+        if(!$Find)
+        {
+            $Time=strtotime(now);
+
+            //写入Ban库
+            mysql_query("INSERT INTO WeChatRequire (`TimeStamp`,`User`,`WrongTime`) VALUES ('$Time','$fromUsername','0')");
+        }
+
+        return $Band;
+    }
+
+    //绑定微信帐号
+    private function bundling_Weixin($fromUsername,$Vcode)
+    {
+        ConnectDB();
+
+        if($this->CheckAndSettingBanLst($fromUsername))
+        {
+            return "验证次数过多，请24小时后重试";
+        }
+        else
+        {
+            $Find=false;
+
+            $result = mysql_query("SELECT * FROM PSS_User,WeChatRequire 
+                WHERE(PSS_User.Binding_Type='Weixin' 
+                AND PSS_User.Binding_Number='$Vcode'
+                AND WeChatRequire.User='$fromUsername'
+                )");
+
+            while($row = mysql_fetch_array($result))
+            {
+                $Find=true;
+
+                if($row['Binding_Type']!='Email' && $row['SignUp']=='0')
+                {
+                    return "账号尚未激活!请先激活,再绑定";
+                }
+                else if(IsActivetedWeixin($row['Email']))
+                {
+                    return "账号已经绑定!无需重复提交";
+                }
+                else
+                {
+                    $SpanTime = strtotime(now) - $row['TimeStamp'];
+                    if($SpanTime<86400)
+                    {
+                        $Email=$row['Email'];
+
+                        //清理该微信在其他Email中的绑定
+                        mysql_query("UPDATE PSS_User SET Weixin=' ' WHERE Weixin='$fromUsername' and Email!='$Email'");
+
+                        //绑定帐号
+                        if(mysql_query("UPDATE PSS_User SET Active='1',Weixin='$fromUsername' where Email='$Email'"))
+                        {
+                            mysql_query("DELETE FROM WeChatRequire WHERE User='$fromUsername'");
+                            return "绑定账号[".$Email."]成功";
+                        }
+                        else
+                        {
+                            return "服务器内部错误:".mysql_error();
+                        }
+                    }
+                    else
+                    {
+                        return "验证码超时,请重新申请!";
+                    }
+                }
+            }
+
+            if(!$Find)
+            {
+                //更新Ban库
+                mysql_query("UPDATE WeChatRequire SET WrongTime=WrongTime+1 WHERE User='$fromUsername'");
+
+                return "验证码有误";
+            }
+        }
+    }
+
+    private function PSS_Request($fromUsername,$KEY)
+    {
+        $KEY=CleanUp($KEY);
+
+        return CreatTask($KEY,$fromUsername);
+    }
+}
+
+?>

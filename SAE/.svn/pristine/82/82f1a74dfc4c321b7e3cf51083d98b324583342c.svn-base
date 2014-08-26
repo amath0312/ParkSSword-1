@@ -1,0 +1,16 @@
+<?php
+$mail = new SaeMail();
+$mail->setOpt( array(
+         'from' => 'codeeer_software@sina.com',
+         'to' => 'codeeer@qq.com',
+             'smtp_host' => 'smtp.exmail.sina.com', 
+             'smtp_username' => 'codeeer_software@sina.com',  
+             'smtp_password' => 'AEC322A2:35dfe6',  
+             'subject' => 'TEST_TITLE',  
+             'content' => 'TEST_CONTENT', 
+             'content_type' => "HTML"
+) ); 
+$ret = $mail->send();
+
+echo "Send Email ... Done!";
+?>

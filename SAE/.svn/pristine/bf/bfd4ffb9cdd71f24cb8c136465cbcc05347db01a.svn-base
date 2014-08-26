@@ -1,0 +1,101 @@
+<?php
+require('Core.php');
+
+$Email=CleanUp($_GET[Email]);
+
+if(!eregi("^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3}$",$Email))
+{   
+    die("NOT Email!");
+} 
+
+//生成用于验证的随机数
+$RandNum=GetGuid();
+
+ConnectDB();
+
+IsLimitedOrDie();
+
+if(IsActivetedEmail($Email))
+{
+	Write2DBAndSendEmail4Back($Email,$RandNum);
+	Write2Log("$Email","请求找回密码操作","GetbackAccount");
+}
+else
+{
+	echo "Not Activeted!";
+}
+
+function HasInGetbackList($Email)
+{
+	$Has=false;
+	$result = mysql_query("SELECT * FROM GetbackList where Email='$Email'");
+	while($row = mysql_fetch_array($result))
+	{
+		$Has=true;
+	}
+	return $Has;
+}
+
+function Write2DBAndSendEmail4Back($Email,$RandNum)
+{
+	//时间戳
+    $Time=strtotime(now);
+
+	//Write2DB
+	if(HasInGetbackList($Email))
+	{
+		if(!mysql_query("UPDATE GetbackList SET TimeStamp='$Time',Vcode='$RandNum' WHERE Email='$Email'"))
+	    {
+	    	die("Failed!".mysql_error());
+	    }
+	}
+	else
+	{
+		if(!mysql_query("INSERT INTO `GetbackList`(`TimeStamp`,`Email`,`Vcode`) VALUES ('$Time','$Email','$RandNum')"))
+	    {
+	    	die("Failed!".mysql_error());
+	    }
+	}
+
+	//SendEmail4Back
+	global $accessKey, $secretKey, $host;
+    $bcms=new Bcms ( $accessKey, $secretKey, $host ) ;
+    $Body=<<< EOT
+<!--HTML-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>找回密码</title>
+<style type="text/css">
+body,td,th {
+	font-family: Verdana, Geneva, sans-serif;
+}
+</style>
+</head>
+<body>
+EOT;
+$Body.="<p><a href=\"http://pss.codeeer.com/ChangePWD.php?Email=$Email&Vcode=$RandNum\">点击链接找回密码</a>（链接仅24小时有效）</p><p>或手动输入以下网址：http://pss.codeeer.com/ChangePWD.php?Email=$Email&Vcode=$RandNum</p>";
+$Body.=<<< EOT
+<h5>(C)2013 ParkSSword 开发团队</h5>
+</body>
+</html>   
+EOT;
+
+    $ret=$bcms->mail ("c258311ed327fc46a8cbeb20c26ab44c", $Body , $Email , array ( Bcms::MAIL_SUBJECT => "ParkSSword 找回密码") );
+
+    if ( false === $ret )
+    {
+        /*echo ( 'WRONG, ' . __FUNCTION__ . ' ERROR!!!!!' ) ;
+        echo ( 'ERROR NUMBER: ' . $bcms->errno ( ) ) ;
+        echo ( 'ERROR MESSAGE: ' . $bcms->errmsg ( ) ) ;
+        echo ( 'REQUEST ID: ' . $bcms->getRequestId ( ) );*/
+        echo "Failed!";
+    }
+    else
+    {
+        /*echo ( 'SUCC, ' . __FUNCTION__ . ' OK!!!!!' ) ;
+        echo ( 'result: ' . print_r ( $ret, true ) ) ;*/
+        echo "SUCC!";
+    }
+}
+?>

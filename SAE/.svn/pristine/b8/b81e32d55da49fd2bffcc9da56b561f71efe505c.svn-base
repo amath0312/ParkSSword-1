@@ -1,0 +1,7 @@
+<?php
+require('Core.php');
+ConnectDB();
+Write2Log("[ROOT]","Test 1");
+Write2Log("[ROOT]","Test 2","");
+echo "OK!";
+?>

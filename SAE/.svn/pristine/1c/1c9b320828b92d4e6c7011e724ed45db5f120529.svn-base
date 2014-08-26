@@ -1,0 +1,15 @@
+<?php
+$sc= apibus::init('sendcloud');
+$Body="<p><a href=\"http://pss.codeeer.com/ActiveID.php?Binding_Type=Email&Email=$OldEmail&Vcode=$RandNum\">点击链接激活帐号</a>（链接仅24小时有效）</p><p>或手动输入以下网址：http://pss.codeeer.com/ActiveID.php?Binding_Type=Email&Email=$OldEmail&Vcode=$RandNum</p>";
+$result = $sc->send_mail(
+  'postmaster@codeeer.sendcloud.org' , //api_user, 需要登录SendCloud创建收信域名获取发送账号
+  'QxMER7fN',  // api_key，需要登录SendCloud创建收信域名获取发送账号。
+  'postmaster@codeeer.sendcloud.org', // from， 发件人地址
+  'codeeer软件中心',  // fromname， 发件人称呼
+  '测试发送',   // subject，邮件主题
+  'codeeer@qq.com', //to， 收件人
+  $Body//html， html形式的邮件正文
+); 
+print_r( $result); 
+echo "SMS...OK?";
+?>

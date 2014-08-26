@@ -1,0 +1,107 @@
+﻿<?php
+require_once('Core.php');
+
+$Email=CleanUp($_GET[Email]);
+$Binding_Type=CleanUp($_GET[Binding_Type]);
+$Vcode=strtoupper(CleanUp($_GET[Vcode]));
+$Para_1=CleanUp($_GET[Para_1]);//补充参数
+
+ConnectDB();
+
+//如果类型为空，则默认为Email注册验证
+//必须判定Type为Email，Weixin，Phone中的一个，不然操作数据库会导致隐患
+if($Email!="")
+{
+	if ($Binding_Type==""||$Binding_Type=="Email"
+		||($Binding_Type=="Weixin" && $Para_1!=""))
+	{
+		//如果验证类型为空，则默认为Email验证
+		if($Binding_Type=="")
+		{
+	    	$Binding_Type="Email";
+		}
+	}
+	else
+	{
+		die("Wrong Type!");
+	}
+}
+else
+{
+	die("No Email!");
+}
+
+if($Vcode!="")
+{
+    //发送注册信息
+    if(Active($Email,$Binding_Type,$Vcode,$Para_1))
+    {
+    	Write2Log("$Email","帐号激活成功");
+        echo "SUCC!";
+    }
+    else
+    {
+    	Write2Log("$Email","帐号激活失败");
+        echo "Failed!";
+    }
+}
+else
+{
+	echo "Vcode Not found!";
+}
+
+function Active($Email,$Binding_Type,$Binding_Number,$Para_1)
+{
+    $SUCC=false;
+	
+	if($Binding_Type=="Email"||$Binding_Type=="Weixin")
+	{
+		$result = mysql_query("SELECT * FROM PSS_User where
+				(Binding_Type='$Binding_Type' AND Binding_Number='$Binding_Number' AND Email='$Email')
+				");
+		while($row = mysql_fetch_array($result))
+		{
+			if($row['Active']=='0')
+			{
+				if($row['Binding_Type']!='Email' && $row['SignUp']=='0')
+				{
+					echo "Not SignUp!";
+				}
+				else
+				{
+					$SpanTime = strtotime(now) - $row['Binding_RequireTime'];
+					if($SpanTime<86400)
+					{
+						$ID=$row['IDCard'];
+						$Data=$row['Binding_Data'];
+
+						//如果是微信的话，直接写入Para_1的值（微信号）
+						if($row['Binding_Type']=='Weixin')$Data=$Para_1;
+
+						if(mysql_query("UPDATE PSS_User SET Active='1',SignUp='1',$Binding_Type='$Data' where IDCard='$ID'"))
+						{
+							$SUCC=true;
+						}
+						else
+						{
+							echo mysql_error();
+						}
+					}
+					else
+					{
+						echo "Time Out!";
+					}
+				}
+			}
+			else
+			{
+				echo "Vcode Disabled!";
+			}
+		}
+	}
+
+    mysql_close($link);
+
+    return $SUCC;
+}
+?>

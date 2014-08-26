@@ -1,0 +1,27 @@
+<?php
+$dbname='akJNpxouYNmjmInJBGXW';
+$host=getenv('HTTP_BAE_ENV_ADDR_SQL_IP');
+$port=getenv('HTTP_BAE_ENV_ADDR_SQL_PORT');
+$user=getenv('HTTP_BAE_ENV_AK');
+$pwd=getenv('HTTP_BAE_ENV_SK');
+
+/*调用mysql_connect()连接服务器*/
+$link = @mysql_connect("{$host}:{$port}",$user,$pwd,true);
+if($link) 
+{
+  	echo "Connect Server Success!<br>";
+}
+else
+{
+	echo "Connect Server Failed: " . mysql_error()."<br>";
+}
+/*连接成功后立即调用mysql_select_db()选中需要连接的数据库*/
+if(mysql_select_db($dbname,$link))
+{
+  	echo "Select Database Success!<br>";
+}
+else
+{
+	echo "Select Database Failed: " . mysql_error($link)."<br>";
+}
+?>

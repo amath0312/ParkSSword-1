@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="codeeer">
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <title>智慧的密码管理工具</title>
+    <link href="dist/css/bootstrap.css" rel="stylesheet">
+    <link href="dist/css/jumbotron.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Focus on Clever PasswordS</a>
+        </div>
+        <!--<div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Login</button>
+            <button type="submit" class="btn btn-info">SignUp</button>
+          </form>
+        </div>-->
+      </div>
+    </div>
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1>ParkSSword</h1>
+        <p>我们从来不保存密码,无论是在本地还是云端</p>
+        <p>我们只记录密码生成策略</p>
+        <p>配合ParkSSword,您可以生成针对不同网站的独立的安全密码</p>
+        <p><a class="btn btn-primary btn-lg" role="button" href="http://pan.baidu.com/s/1Gdobi" target="_blank">Download &raquo;</a></p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h2><font color="orange">黑客怎么拿到你的密码</font></h2>
+          <p><li>第一关:社会工程学</li><br>如果密码是由您或您亲人的个人信息组成(生日,电话号,身份证号,门牌号之类的)那就赶紧更换吧,您的密码已经处于很危险的环境,因为您的这些信息都可以被得到,之后,黑客利用这些数据逐个测试密码,在每秒十几万的测试速度下,得到密码仅仅是时间问题</p>
+          <p><li>第二关:利用不安全的"邻居"</li><br>假设最终目标是获取您QQ密码,但入侵腾讯难度比较大,那我就会通过入侵一个相对简单的网站,比如网易,从中得到您的密码.对于大多数人来说,所有网站的密码都如出一辙或甚至采用同一个密码.于是结果就注定了</p>
+          <p><li>第三关:暴力入侵</li><br>通过100%的密码碰撞尝试或对储存您密码的服务器暴力入侵得到密码<br>对呀这种情况,我只能说:没辙.但是,如果配合ParkSSword工具的使用,还是能很大的加强安全性,在这种情况下即使密码泄漏,黑客也不能得到密码的规律性,因为工具生成的本身就是无规律的,从而阻止了"邻居"式的入侵</p>
+        </div>
+        <div class="col-md-4">
+          <h2><font color="navy">为什么要用密码管理工具</font></h2>
+          <li>记忆力毕竟有限,而且,人工设计的密码都有规律可循,这本身就是不安全的,况且为什么我们要把精力投放在这上面呢</li>
+          <li>现阶段基于生物特征做为密码的验证系统还没有普遍(比如指纹,视网膜识别)大部分密码还是需要手工输入<br>与其去记忆,去设计各种奇葩的密码,还不如把它交给ParkSSword,因为它的意义就是完成这一系列任务</li>
+          <li>相信我,正确的去使用ParkSSword,能使您的密码体系达到一个相当高的水平</li>
+       </div>
+        <div class="col-md-4">
+          <h2><font color="darkgreen">如何使用ParkSSword</font></h2>
+          <li>我们围绕一个例子展开描述:</li>
+          <p>假设要生成用于登录百度帐号的密码,无论是"贴吧"还是"知道",所有这些网站的根域名都是"baidu.com"<br>于是,只需要把"baidu.com"输入至ParkSSword的文本框,然后按下回车键,一个具有全世界唯一性的密码就会自动生成并且复制到剪贴板中<br>您需要做的就是在百度登录部分的密码输入框里按下Ctrl+V把密码粘贴进去,就这么简单!</p>
+          <h6>小提示:如果把带有"http"样式的整个链接粘贴进ParkSSword,它也会自动识别域名信息的<br>也就是说,您在输入框输入"http://tieba.baidu.com/"或"baidu.com"返回的结果,也就是密码,都是一样的</h6>
+          <li>现在,有一个小问题,因为不同网站对密码的要求不同,有可能不符合ParkSSword默认生成的密码<br>这就需要有选择,有针对的生成特定种类的密码了</li>
+          <p>还拿百度举例,因为它要求密码最大长度是14位,而且,不允许有特殊字符<br>进入ParkSSword设置模块,添加一条"手动密码",并在设置中做最大长度和密码元素的设定<br>保存之后,再按回车,这次生成的,就是符合百度标准的"手动密码"了</p>
+          <p>因为ParkSSword是以硬件信息为加密特征码,所以在不同环境下输入"baidu.com"返回的结果都是不同的,当你离开本机时登录密码就成了麻烦<br>为了解决这一困扰,我们开发了云平台系统,进行一次云同步之后,您就在微信上得到和本机一样的返回密码了<br>需要注意的是,在微信端,对密码的请求必须加上"mm="前缀(例如:mm=baidu.com)</p>
+          <li>为了提高安全性,您可以对ParkSSword生成的密码进行稍微的处理再使用<br>例如,当返回的密码为"8DBF7DE8:05172774"时,可以从第二位开始使用,也就是说把"DBF7DE8:05172774"当做登录的密码,这样一来,密码的安全性将大大提高,而且,这东西,貌似记起来也不难嘛!</li>
+          <p><br><a class="btn btn-default" href="QA.html" target="_blank" role="button">用户问答 &raquo;</a></p>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; 2013 Codeeer</p>	        
+		<script type="text/javascript" style="VISIBILITY:hidden">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_4506583'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/stat.php%3Fid%3D4506583%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+      </footer>
+    </div>
+
+    <script src="dist/js/jquery-1.10.2.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

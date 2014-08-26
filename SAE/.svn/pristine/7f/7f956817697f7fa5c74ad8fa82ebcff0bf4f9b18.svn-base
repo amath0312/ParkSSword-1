@@ -1,0 +1,96 @@
+<?php
+require('Core.php');
+
+$Email=CleanUp($_GET[Email]);
+$PassWord=CleanUp($_GET[PassWord]);
+//密码加盐
+$PassWord=MD5Saltly($PassWord);
+
+if(!preg_match("/^[_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3}$",$Email))
+{   
+    die("NOT Email!");
+} 
+
+$mysql = new SaeMysql();
+
+IsLimitedOrDie();
+
+if($Email!=""&&$PassWord!="")
+{
+    //用于验证的随机数
+    $RandNum=GetGuid();
+
+    //发送注册信息
+    if(WriteToSql($RandNum))
+    {
+        V_Email($Email,$Email,$RandNum);
+        Write2Log("$Email","注册成功","SignUp");
+        echo "SUCC!";
+    }
+    else
+    {
+        echo "Failed!";
+    }
+}
+else
+{
+    Write2Log("[ROOT]","入侵拦截:[SignUp.php]错误参数信息");
+    echo "Wrong Parameters!";
+}
+
+function WriteToSql($Binding_Number)
+{
+    global $Email,$PassWord;
+    $SUCC=false;
+
+    //时间戳
+    $Time=strtotime(now);
+
+    //检测是否存在Email
+    $IsExist=false;
+    $AlreadySignUp=false;
+    $IDCard;
+    $FindIDCard=$mysql->getData("SELECT * FROM PSS_User where Email='$Email'");
+    while($row = mysql_fetch_array($FindIDCard))
+    {
+        if($row['IDCard']!="")
+        {
+            $AlreadySignUp=$row['SignUp'];
+            $IsExist=true;
+            $IDCard=$row['IDCard'];
+            break;
+        }
+    }
+
+    if($IsExist && $AlreadySignUp)
+    {
+        Write2Log("$Email","注册失败:已经存在的帐号","SignUp");
+        echo "Exist Email!";
+    }
+
+    elseif($IsExist)
+    {
+        //刷新数据库
+        $GuidStr=GetGuid();
+        if($mysql->runSql("UPDATE PSS_User SET PassWord='$PassWord',Active='0',Binding_RequireTime='$Time',Binding_Type='Email',Binding_Data='$Email',Binding_Number='$Binding_Number' where IDCard='$IDCard'"))
+        {
+            echo "Refresh Vcode!<br>";
+            $SUCC=true;
+        }
+    }
+    else
+    {
+        //写入数据库
+        $GuidStr=GetGuid();
+        if($mysql->runSql("INSERT INTO `PSS_User`
+        (`IDCard`,`Email`,`PassWord`,`SignUp`,`Active`,`Binding_RequireTime`,`Binding_Type`,`Binding_Data`,`Binding_Number`) VALUES 
+        ('$GuidStr','$Email','$PassWord','0','0','$Time','Email','$Email','$Binding_Number')"))
+        {
+            //echo "Success!";
+            $SUCC=true;
+        }
+    }
+
+    return $SUCC;
+}
+?>

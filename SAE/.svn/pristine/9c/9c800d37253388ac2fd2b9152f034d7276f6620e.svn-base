@@ -1,0 +1,240 @@
+<?php
+//过滤字符
+function CleanUp($string) 
+{ 
+	if(is_array($string)) { 
+	foreach($string as $key => $val) { 
+	$string[$key] = dhtmlspecialchars($val); 
+	} 
+	} else { 
+	$string = preg_replace('/&((#(\d{3,5}|x[a-fA-F0-9]{4})|[a-zA-Z][a-z0-9]{2,5});)/', '&\\1', 
+	str_replace(array('&', '"', '<', '>','\''), array('', '', '', '',''), $string)); 
+	} 
+	return $string; 
+}
+
+//MD5加盐
+function MD5Saltly($PassWord)
+{
+	return md5(md5(md5($PassWord)."ParkSSword")."Codeeer");
+}
+
+//生成GUID
+function GetGuid()
+{
+    return strtoupper(md5(uniqid(mt_rand(), true)));
+}
+
+//发送验证邮件
+function V_Email($OldEmail,$NewEmail,$RandNum)
+{
+    $Body =<<< EOT
+<!--HTML-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>激活帐号</title>
+<style type="text/css">
+body,td,th {
+	font-family: Verdana, Geneva, sans-serif;
+}
+</style>
+</head>
+<body>
+EOT;
+
+$Body.="<p><a href=\"http://pss.codeeer.com/ActiveID.php?Binding_Type=Email&Email=$OldEmail&Vcode=$RandNum\">点击链接激活帐号</a>（链接仅24小时有效）</p><p>或手动输入以下网址：http://pss.codeeer.com/ActiveID.php?Binding_Type=Email&Email=$OldEmail&Vcode=$RandNum</p>";
+$Body.=<<< EOT
+<h5>(C)2013 ParkSSword 开发团队</h5>
+</body>
+</html> 
+EOT;
+
+	$mail = new SaeMail();
+	$ret = $mail->quickSend( $NewEmail , 'ParkSSword 验证信息' , $Body , 'codeeer_software@sina.com' , 'AEC322A2:35dfe6' );
+
+	if ($ret === false)var_dump($mail->errno(), $mail->errmsg());
+
+    return $ret;
+}
+
+//查找微信归属帐号
+function WhoUseThisWeixin($WechatID)
+{
+	$Final = "[未注册]".$WechatID;
+
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM PSS_User where Weixin='$WechatID'");
+	if(!empty($result))
+	{
+		foreach ($result as $row) 
+		{
+			$Final = $row['Email'];
+		}
+	}
+
+	return $Final;
+}
+
+//验证Email是否存在
+function IsExistEmail($Email)
+{
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM PSS_User where Email='$Email'");
+	if(!empty($result))$Has=true;
+	return $Has;
+}
+
+//验证Email是否激活
+function IsActivetedEmail($Email)
+{
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM PSS_User where Email='$Email' and SignUp='1'");
+	if(!empty($result))$Has=true;
+	return $Has;
+}
+
+//验证Email是否已经绑定微信
+function IsActivetedWeixin($Email)
+{
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM PSS_User where Email='$Email'");
+	if(!empty($result))
+	{
+		foreach ($result as $row)
+		{
+			if(trim(trim($row['Weixin'],"　"))!="")$Has=true;
+		}
+	}
+	return $Has;
+}
+
+//验证Email和密码
+function CheckEmailAndPassWord($Email,$PassWord)
+{
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM PSS_User where Email='$Email' and PassWord='$PassWord'");
+	if(!empty($result))$Has=true;
+	return $Has;
+}
+
+//是否限定登录
+function IsLimited()
+{
+	//Get IP
+	$IPAddress=get_IPInfo();
+
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM IPLimited where IP='$IPAddress'");
+	if(!empty($result))
+	{
+		foreach ($result as $row)
+		{
+			if($row['SignUp']>10 or $row['GetbackAccount']>10 or $row['SendVerify']>10)
+			{
+				$Has=true;
+			}
+		}
+	}
+	return $Has;
+}
+
+//是否限定登录
+//失败则直接Die()操作
+function IsLimitedOrDie()
+{
+	//Get IP
+	$IPAddress=get_IPInfo();
+
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM IPLimited where IP='$IPAddress'");
+	if(!empty($result))
+	{
+		foreach ($result as $row)
+		{
+			if($row['SignUp']>10 or $row['GetbackAccount']>10 or $row['SendVerify']>10)
+			{
+				Write2Log("[ROOT]","IP Address Limited!");
+				die("IP Limited!");
+			}
+		}
+	}
+}
+
+//查看是否存在于IP限定表
+function IsInIPLimited($IPAddress)
+{
+	$Has=false;
+	$mysql = new SaeMysql();
+	$result = $mysql->getData("SELECT * FROM IPLimited where IP='$IPAddress'");
+	if(!empty($result))	$Has=true;
+	return $Has;
+}
+
+//获取IP
+function get_IPInfo()
+{
+	if ($HTTP_SERVER_VARS["HTTP_X_FORWARDED_FOR"]) 
+	{ 
+	$ip = $HTTP_SERVER_VARS["HTTP_X_FORWARDED_FOR"]; 
+	} 
+	elseif ($HTTP_SERVER_VARS["HTTP_CLIENT_IP"]) 
+	{ 
+	$ip = $HTTP_SERVER_VARS["HTTP_CLIENT_IP"]; 
+	}
+	elseif ($HTTP_SERVER_VARS["REMOTE_ADDR"]) 
+	{ 
+	$ip = $HTTP_SERVER_VARS["REMOTE_ADDR"]; 
+	} 
+	elseif (getenv("HTTP_X_FORWARDED_FOR")) 
+	{ 
+	$ip = getenv("HTTP_X_FORWARDED_FOR"); 
+	} 
+	elseif (getenv("HTTP_CLIENT_IP")) 
+	{ 
+	$ip = getenv("HTTP_CLIENT_IP"); 
+	} 
+	elseif (getenv("REMOTE_ADDR"))
+	{ 
+	$ip = getenv("REMOTE_ADDR"); 
+	} 
+	else 
+	{ 
+	$ip = "Unknown"; 
+	} 
+	return $ip; 
+}
+
+//写入日志
+function Write2Log($Email,$Event,$Limited_Words)
+{
+	//Get IP
+	$IPInfo=get_IPInfo();
+
+	//Get Time
+	$Time=date('Y-m-d H:i:s',time());
+	$Time2=strtotime(now);
+
+	//写入日志文件
+	$mysql = new SaeMysql();
+	$mysql->runSql("INSERT INTO `LOG`(`Time`,`IPInfo`,`Email`,`Event`) VALUES ('$Time','$IPInfo','$Email','$Event')");
+
+	//写入IPLimited清单
+	if(isset($Limited_Words))
+	{
+		if(IsInIPLimited($IPInfo))
+		{
+			$mysql->runSql("UPDATE IPLimited SET $Limited_Words=$Limited_Words+1 where IP='$IPInfo'");
+		}
+		else
+		{
+			$mysql->runSql("INSERT INTO `IPLimited`(`Time`,`IP`) VALUES ('$Time2','$IPInfo')");
+		}
+	}
+}
+?>

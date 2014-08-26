@@ -1,0 +1,61 @@
+<?php
+require_once('Core.php');
+
+//识别用户信息
+$Email=CleanUp($_GET[Email]);
+$PassWord=CleanUp($_GET[PassWord]);
+$PhoneID=CleanUp($_GET[PhoneID]);
+
+//手动密码单
+$StrData=$GLOBALS['HTTP_RAW_POST_DATA'];
+
+$mysql = new SaeMysql();
+
+//验证密码
+if(isset($Email) && isset($PassWord))
+{
+	//密码加盐
+	$PassWord=MD5Saltly($PassWord);
+
+	if(CheckEmailAndPassWord($Email,$PassWord))
+	{
+		$mysql->runSql("UPDATE PSS_User SET LastLoginPhone = '$PhoneID' WHERE Email='$Email' and PassWord='$PassWord'");
+
+		if(isset($StrData))
+		{
+			$DataFormat='/#Unit#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Unit#/';
+
+			//加载移动终端数据
+			preg_match_all($DataFormat, $StrData, $AndroidData);
+			echo "AndroidData Count:".count($AndroidData);
+
+			//加载服务器StrData数据
+			$StrDataFromServer=$mysql->getData("SELECT StrData FROM PSS_User WHERE Email='$Email' AND PassWord='$PassWord'");
+			preg_match_all($DataFormat, $StrDataFromServer, $ServerData);
+			echo "ServerData Count:".count($ServerData);
+			
+			
+			//echo "part 1: ".$matches[1][$i]."@";//domin
+			//echo "part 2: ".$matches[2][$i]."@";//pwdpool
+			//echo "part 3: ".$matches[3][$i]."@@";//length
+
+			//$mysql->runSql("UPDATE PSS_User SET XMLData ='$XMLData' WHERE Email='$Email' and PassWord='$PassWord'");//暂停使用，用于测试
+			
+			echo $XMLData;
+
+
+			Write2Log("$Email","上传Android端密码生成策略");
+			echo "SUCC!";
+		}
+	}
+	else
+	{
+		echo "Wrong PassWord!";
+	}
+}
+else
+{
+	//缺少参数
+	echo "Missing Paras!";
+}
+?>

@@ -1,0 +1,15 @@
+<?php
+$sms = apibus::init( "sms"); //创建短信服务对象
+    $mobile = "18640103605";
+    $msg = "你好, 你不是SB!";
+    $obj = $sms->send( $mobile, $msg , "UTF-8");
+        print_r( $obj );
+
+        //错误输出 Tips: 亲，如果调用失败是不收费的
+        if ( $sms->isError( $obj ) )
+        {
+        print_r( $obj->ApiBusError->errcode );
+        print_r( $obj->ApiBusError->errdesc );
+        }
+echo "SMS...OK?";
+?>

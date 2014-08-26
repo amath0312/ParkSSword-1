@@ -1,0 +1,156 @@
+[全局控制]
+[返回值]
+IP限定 -> "IP Limited!" -> 提示:您的IP操作太频繁,请稍后再试
+
+[清理超时数据库]
+http://pss.codeeer.com/ClsRequireTable.php
+
+[注册ID]
+注册：http://pss.codeeer.com/SignUp.php?Email=<邮箱>&PassWord=<密码>
+E.G.
+http://pss.codeeer.com/SignUp.php?Email=codeeer@qq.com&PassWord=admin6
+
+[微信验证思路]
+绑定：http://pss.codeeer.com/SendVerify.php?Email=<邮箱>&PassWord=<密码>&Binding_Type=Weixin
+微信客户端输入 -> bd=<绑定时返回的验证码>
+激活：http://pss.codeeer.com/ActiveID.php?Email=<邮箱>&Binding_Type=Weixin&Vcode=<绑定时返回的验证码>&Para_1=<微信特征码>
+
+E.G.
+http://pss.codeeer.com/SendVerify.php?Email=codeeer@qq.com&PassWord=admin6&Binding_Type=Weixin
+
+[BAE接口]
+Email队列：c258311ed327fc46a8cbeb20c26ab44c
+Phone队列：3e00dacd35d2dfebf9b77caee2f1275f
+数据库名：akJNpxouYNmjmInJBGXW
+
+[天翼接口]
+App_Id -> 301288560000032713
+App_Secret -> a2facf976ba9e5acb39b2d04e5cfdd38
+access_token -> b5e742b17395fe6881c4d34a889928941377925296290
+URL监控页 -> http://pss.codeeer.com/SMS.php
+
+[各种PHP接口]
+
+[函数名]CheckStatu.php
+[功能]验证绑定状态
+[参数]Email
+[返回值]
+第1位为激活状态
+第2位为微信状态
+
+E.G.
+http://pss.codeeer.com/CheckStatu.php?Email=70193805@qq.com
+返回:11
+
+[函数名]Login.php
+[功能]登录ID
+[参数]Email,PassWord,CPUID
+[返回值]
+成功 -> "SUCC!"
+错误的用户名或密码 -> "Wrong UserName or Password!"
+
+[函数名]SignUp.php
+[功能]注册ID
+[参数]Email,PassWord
+[返回值]
+错误的邮箱格式邮箱 -> "NOT Email!"
+成功 -> "SUCC!"
+失败 -> "Failed!"
+已经存在的用户 -> "Exist Email!"
+
+[函数名]ActiveID.php
+[功能]激活ID
+[参数]Email,(Binding_Type),Vcode,(Para_1)
+[返回值](返回至用户交互界面)
+/*
+成功 -> "SUCC!"
+没有输入用户Email -> "No Email!"
+激活码失效 -> "Vcode Disabled!"
+验证时间超时 -> "Time Out!"
+激活类型错误 -> "Wrong Type!"
+手机验证码错误 -> "Wrong Randcode!"
+失败 -> "Failed!"
+[特殊]关于Phone的参数传递 -> Vcode对应字段Identifier Para_1对应字段Randcode
+*/
+
+[函数名]SendVerify.php
+[功能]发送绑定验证
+[参数]Email,PassWord,Binding_Type,Binding_Data
+[返回值]
+已经存在的用户 -> "Exist Email!"
+密码错误 -> "Wrong Password!"
+绑定参数为空 -> "No Bind Data!"
+绑定类型错误 -> "No Bind Type!"
+账号尚未激活 -> "Not SignUp!"
+成功 -> "1"（weixin验证会返回验证信息"[XXXX]"）
+没有输入手机号 -> "No PhoneNum!"
+失败 -> "0"
+[解释]
+Email -> 发送验证之后，用户在指定的Email会收到验证码，输入至ActiveID.php或打开包含激活参数的URL
+Weixin -> 发送验证的同时回显验证信息，用户向公众平台输入该验证信息;如果微信也收到同样的信息，则由系统自动提交到ActiveID
+
+[函数名]Unbundling.php
+[功能]解绑用户信息
+[参数]Email,PassWord,Type
+[返回值]
+错误的用户名和密码 -> "Wrong Email or PWD!"
+成功 -> "SUCC!"
+解绑类型错误 -> "Wrong Para!"
+
+[函数名]GetbackAccount.php
+[功能]找回密码
+[参数]Email
+[返回值]
+错误的邮箱格式 -> "NOT Email!"
+邮件发送失败，内部错误 -> "Failed!"
+成功 -> "SUCC!"
+邮箱尚未成功绑定帐号，不能用于找回 -> "Not Activeted!"
+E.G.
+http://pss.codeeer.com/GetbackAccount.php?Email=codeeer@qq.com
+
+[函数名]ChangePWD.php
+[功能]修改密码
+[参数]Email,Vcode
+[返回值]（这是用户交互页面）
+E.G.
+http://pss.codeeer.com/ChangePWD.php?Email=codeeer@qq.com&Vcode=1234
+
+[函数名]XmlFresh.php
+[功能]提交PSS本地数据
+[参数]Email,PassWord,CPUID,HardID,USBID（非必须）,XMLData（非必须）
+[返回值]
+成功 -> "SUCC!"
+密码错误 -> "Wrong PassWord!"
+失败 -> "Failed!"
+缺少参数 -> "Missing Paras!";
+E.G.
+http://pss.codeeer.com/XmlFresh.php?Email=codeeer@qq.com&PassWord=admin6&CPUID=_CPU_&HardID=_HardID_&USBID=_USBID_
+
+
+[函数名]CheckServer.php
+[功能]验证服务器状态
+E.G.http://pss.codeeer.com/CheckServer.php
+
+
+[函数名]Core.php->Write2Log
+[参数]$Email,$Event,($Limited_Words)
+$Limited_Words为IPLimited表的字段
+[功能]写入日志函数
+
+
+[函数名]
+Core.php->IsLimited 返回Limited状态
+Core.php->IsLimitedOrDie 如果处于Limited状态,直接执行Die()中断
+[参数][无]
+[功能]防爆设计;如果处于限定状态,中断作业
+[思路]针对页面限定:
+SignUp,GetbackAccount,SendVerify
+[返回值][bool值]
+
+[微信接口]
+[功能&参数]
+绑定ParkSSword的验证码：以[bd=]开头（e.g. bd=a186）
+回显ParkSSword的密码：以[mm=]开头（e.g. mm=baidu.com）
+[返回值]
+E.G.
+http://pss.codeeer.com/CreatPSS.php?WeixinID=oaoz7jtNNI8P4RHUsR9l7s1O0wJY&Domin=baidu.com

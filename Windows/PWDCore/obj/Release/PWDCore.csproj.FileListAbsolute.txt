@@ -1,0 +1,13 @@
+Z:\CODE\ParkSSWORD\PWDCore\bin\Release\PWDCore.dll
+Z:\CODE\ParkSSWORD\PWDCore\bin\Release\PWDCore.pdb
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.csprojResolveAssemblyReference.cache
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.Bind_Email.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.FrmForgetPWD.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.FrmManualPWD.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\parkssword.FrmSetting.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.FrmSignUp.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.Link2Weixin.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.USBSelect.resources
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.csproj.GenerateResource.Cache
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.dll
+Z:\CODE\ParkSSWORD\PWDCore\obj\Release\PWDCore.pdb

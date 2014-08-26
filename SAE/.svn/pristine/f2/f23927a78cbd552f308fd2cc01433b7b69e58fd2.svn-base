@@ -1,0 +1,12 @@
+<?php
+require('Core.php');
+
+if(IsActivetedEmail('codeeer@126.com'))
+{
+	echo "OK!";
+}
+else
+{
+	echo "NO!";
+}
+?>

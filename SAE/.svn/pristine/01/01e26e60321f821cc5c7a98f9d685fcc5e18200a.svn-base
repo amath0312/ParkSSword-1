@@ -1,0 +1,12 @@
+<?php
+$mail = new SaeMail();
+    $mail->quickSend( 
+        "codeeer@qq.com" ,
+        "ParkSSword 验证信息" ,
+        "this is a test" ,
+        "codeeer_software@sina.com" ,
+        "AEC322A2:35dfe6" 
+    );
+
+echo "Send Email ... Done!";
+?>

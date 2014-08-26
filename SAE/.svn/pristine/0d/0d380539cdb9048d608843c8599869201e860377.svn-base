@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <title>用户问答</title>
+
+    <link href="dist/css/bootstrap.css" rel="stylesheet">
+    <link href="dist/css/jumbotron.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Question and Answer</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right">
+            <script language="javascript">
+            function SubmitQuestion()
+            {
+                window.open("mailto:codeeer@qq.com","_blank");//打开一个新窗口 
+            }
+            </script>
+            <button type="submit" class="btn btn-info" onClick="SubmitQuestion()">提交问题</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="jumbotron">
+        <div class="QA">
+          <li>什么是"手动"密码</li>
+          <ul>它是用来生成具有指定密码结构(密码长度,绑定设定,密码元素)的密码
+          <br>当输入不存在于"手动列表"时,ParkSSword采用默认设定的方式创造密码
+          <br>当输入存在于"手动列表",ParkSSword就会根据用户指定的要求设定生成密码
+          <br>例如:<br>添加"baidu.com"为手动列表之前,输入"baidu.com"<br><img src="img/eg1.png"/><br>输出结果为"871C4508:e0515c2c"<br>当添加至"手动列表之后"<br><img src="img/eg2.png"/><br>这次输出变成了"0t-#J\*r"
+          </ul>
+          <li>"密码结构"中的"针对手动列表"和"针对默认生成"是什么意思</li>
+          <ul>"针对默认生成"是软件默认情况下密码的生成策略
+          <br><img src="img/eg3.png"/><br>如图所示的配置意味着针对所有输入ParkSSword将输出左侧大写,右侧小写,左右各8个长度并中间以分号分割的密码,例如:<h6>2A249125:b5f5fb0a</h6><h6>FA2BEBDA:3826ed84</h6><h6>8E8D4E74:35f9ac46</h6><h6>325B5F0C:bf937f33</h6><h6>AA169ED5:7f093f4c</h6>
+          "针对手动列表"是指添加手动列表时默认的参数设定.
+          <br><font color="navy">以上2种生成策略适用于大多数用户的安全标准,如果您觉得密码可以不要这么复杂可以通过修改这种默认生成实现统一降低密码质量,相反,如果您是从事安全工作的开发员,可以将密码策略调整到一个非常复杂的水准</font></ul>
+        </div>
+    </div>
+    <script src="dist/js/jquery-1.10.2.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

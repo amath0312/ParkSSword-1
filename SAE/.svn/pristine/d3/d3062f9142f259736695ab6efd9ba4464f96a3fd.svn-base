@@ -1,0 +1,14 @@
+<?php
+$sc= apibus::init('sendcloud');
+$result = $sc->send_mail(
+  'postmaster@codeeer.sendcloud.org' , //api_user, 需要登录SendCloud创建收信域名获取发送账号
+  'QxMER7fN',  // api_key，需要登录SendCloud创建收信域名获取发送账号。
+  'postmaster@codeeer.sendcloud.org', // from， 发件人地址
+  'codeeer软件中心',  // fromname， 发件人称呼
+  '测试发送',   // subject，邮件主题
+  'codeeer@qq.com', //to， 收件人
+  'HELLO,CODEEER!'//html， html形式的邮件正文
+); 
+print_r( $result); 
+echo "SMS...OK?";
+?>
