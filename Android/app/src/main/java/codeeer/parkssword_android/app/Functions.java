@@ -306,9 +306,6 @@ class HtmlRequest {
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(4))+"' WHERE Key = 'LockCPU_Default'");
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(5))+"' WHERE Key = 'LockHard_Default'");
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(6))+"' WHERE Key = 'LockUSB_Default'");
-                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(7)+"' WHERE Key = 'CPUID'");//TODO Setting CPUID,HardID,USBID
-                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(8)+"' WHERE Key = 'HardID'");
-                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(9)+"' WHERE Key = 'USBID'");//
             }
 
             while (matcher_Unit.find()) {

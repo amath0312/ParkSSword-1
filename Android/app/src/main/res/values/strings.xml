@@ -23,5 +23,6 @@
     <string name="title_activity_sign_up">SignUp</string>
     <string name="title_activity_forget_password">ForgetPassword</string>
     <string name="title_activity_manual_password">ManualPassword</string>
+    <string name="title_activity_setting_hard_info">SettingHardInfo</string>
 
 </resources>

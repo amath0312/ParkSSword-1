@@ -39,6 +39,14 @@ public class HandleDB {
         return result;
     }
 
+    //刷新硬件信息
+    public static void RefreshHardInfo2Sqlite(SqliteHelper sh){
+        SQLiteDatabase db = sh.getWritableDatabase();
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.CPUCodeStr + "' WHERE Key = 'CPUID'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.HardCodeStr + "' WHERE Key = 'HardID'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.USBCodeStr + "' WHERE Key = 'USBID'");
+    }
+
     //读取手动列表
     public static class ManualList
     {

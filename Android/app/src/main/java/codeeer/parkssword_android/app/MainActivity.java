@@ -363,6 +363,15 @@ public class MainActivity extends Activity implements TextWatcher {
         startActivity(intent);
     }
 
+    //设置硬件参数
+    public void SettingHardInfo(MenuItem item) {
+
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, SettingHardInfo.class);
+        startActivity(intent);
+
+    }
+
 
     private class SureButtonListener implements android.content.DialogInterface.OnClickListener{
 

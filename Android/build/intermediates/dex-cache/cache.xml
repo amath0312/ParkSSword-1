@@ -2,16 +2,28 @@
 <pre-dex-items>
 
     <item
-        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\classes-43c0d8147c6fa39e8872c9ae890c32fb7f6030a1.jar"
-        jar="Z:\CODE\ParkSSword\Android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\classes-d8b9e79b0ae471febd3f12843878497e631bc61e.jar"
+        jar="Z:\CODE\ParkSSword\Android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\20.0.0\classes.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef"/>
     <item
-        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-7fb2d546485a34b86388a8d066cf9326e53edb71.jar"
-        jar="C:\Users\Co\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\classes-3b31f8390bac4d932fb161b63592b234cbdb0192.jar"
+        jar="Z:\CODE\ParkSSword\Android\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\classes.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+    <item
+        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\internal_impl-20.0.0-a9f10accf6f890bd2eed5023bdfb9e47895e3668.jar"
+        jar="Z:\CODE\ParkSSword\Android\app\build\intermediates\exploded-aar\com.android.support\support-v4\20.0.0\libs\internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="Z:\CODE\ParkSSword\Android\app\build\intermediates\pre-dexed\debug\support-annotations-20.0.0-157a0b8ff4d9e9c8eec2d6d84c1832c5e251a1fd.jar"
+        jar="C:\Users\Co\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
 
 </pre-dex-items>

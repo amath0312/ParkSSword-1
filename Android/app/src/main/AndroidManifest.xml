@@ -9,8 +9,8 @@
 
     <application
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-        android:icon="@drawable/pss">
+        android:icon="@drawable/pss"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         <activity
             android:name=".MainActivity"
             android:label="ParkSSword" >
@@ -43,6 +43,10 @@
         <activity
             android:name=".ManualPassword"
             android:label="ParkSSword" >
+        </activity>
+        <activity
+            android:name=".SettingHardInfo"
+            android:label="硬件参数设定" >
         </activity>
     </application>
 
