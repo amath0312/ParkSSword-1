@@ -1,0 +1,9 @@
+Z:\CODE\ParkSSword\Windows\parkssword\obj\Debug\ParkSSword.csprojResolveAssemblyReference.cache
+Z:\CODE\ParkSSword\Windows\parkssword\obj\Debug\parkssword.FrmMain.resources
+Z:\CODE\ParkSSword\Windows\parkssword\obj\Debug\ParkSSword.csproj.GenerateResource.Cache
+Z:\CODE\ParkSSword\Windows\parkssword\bin\Debug\parkssword.exe
+Z:\CODE\ParkSSword\Windows\parkssword\bin\Debug\parkssword.pdb
+Z:\CODE\ParkSSword\Windows\parkssword\bin\Debug\PWDCore.dll
+Z:\CODE\ParkSSword\Windows\parkssword\bin\Debug\PWDCore.pdb
+Z:\CODE\ParkSSword\Windows\parkssword\obj\Debug\parkssword.exe
+Z:\CODE\ParkSSword\Windows\parkssword\obj\Debug\parkssword.pdb

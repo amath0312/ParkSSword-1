@@ -11,8 +11,6 @@ $StrData=$GLOBALS['HTTP_RAW_POST_DATA'];
 
 $mysql = new SaeMysql();
 
-echo "#Head#";//头尾标识
-
 //验证密码
 if(isset($Email) && isset($PassWord))
 {
@@ -26,7 +24,7 @@ if(isset($Email) && isset($PassWord))
 		if(isset($StrData))
 		{
 			$DataFormat='/#Unit#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Unit#/';
-			$DataFormat_Setting='/#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#/';
+			$DataFormat_Setting='/#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#/';
 
 			//加载移动终端数据
 			preg_match_all($DataFormat, $StrData, $AndroidData);
@@ -99,7 +97,7 @@ if(isset($Email) && isset($PassWord))
 					$NewData2Str.=$TempStr;
 				}
 				$FinalData=$NewSetting.$NewData2Str;
-				echo $FinalData;
+				echo "#Head#".$FinalData."#Tail#";
 				$mysql->runSql("UPDATE PSS_User SET StrData='$FinalData' where Email='$Email'");
 			}
 			
@@ -117,6 +115,4 @@ else
 	//缺少参数
 	echo "Missing Paras!";
 }
-
-echo "#Tail#";//头尾标识
 ?>

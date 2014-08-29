@@ -84,7 +84,7 @@ public class HandleDB {
                     +"#@#"+Functions.Setting_Default.LockCPU
                     +"#@#"+Functions.Setting_Default.LockHard
                     +"#@#"+Functions.Setting_Default.LockUSB
-                    +"#@#"+ Functions.CPUCodeStr+"#@#"+Functions.HardCodeStr+"#@#"+Functions.USBCodeStr+"@#Setting#");
+                    +"@#Setting#");
             List<Functions.ManualItems> Lst2Str = Functions.ManualItemsLst;
 
             for(Functions.ManualItems Item : Lst2Str){

@@ -1,10 +1,12 @@
 ﻿using Microsoft.Win32;
 using PWDCore;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
@@ -17,11 +19,7 @@ namespace parkssword
         {
             InitializeComponent();
 
-            //加载设定
-            FreshDefaultSettingButtons();
-
-            //加载手动列表
-            FreshListview();
+            ReloadSettingsAndUnits();
 
             //加载Change事件
             numericUpDown1.ValueChanged += ChangedChanged;
@@ -32,6 +30,74 @@ namespace parkssword
             checkBox6.CheckedChanged += ChangedChanged;
             checkBox8.CheckedChanged += ChangedChanged;
             checkBox9.CheckedChanged += ChangedChanged;
+
+            button_CheckUpdate.Click += delegate(object sender, EventArgs e)
+            {
+                CheckUpdateAndLoginS SS = new CheckUpdateAndLoginS(ProductVersion.ToString());
+                SS.LoginS();
+                SS.CheckUpdate(button_CheckUpdate);
+            };
+            textBox_Email.TextChanged += delegate(object sender, EventArgs e) { label_Email.Visible = textBox_Email.Text == "" ? true : false; };
+            textBox_Pass.KeyDown += delegate(object sender, KeyEventArgs e)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if (textBox_Email.Text != "" && textBox_Pass.Text != "")
+                    {
+                        if (Functions.IsEmail(textBox_Email.Text))
+                        {
+                            DoSynchronizationThread();
+                        }
+                        else
+                        {
+                            label_BBS.Text = "Email格式错误";
+                        }
+                    }
+                    else
+                    {
+                        label_BBS.Text = "请完整输入用户名和密码";
+                    }
+                }
+            };
+            textBox_Pass.TextChanged += delegate(object sender, EventArgs e) { label_Pass.Visible = textBox_Pass.Text == "" ? true : false; };
+
+            button_Extend.Click += delegate(object sender, EventArgs e)
+            {
+                splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
+                panel2.Enabled = !panel2.Enabled;
+                button_Extend.Text = button_Extend.Text == "<" ? ">" : "<";
+            };
+
+            tabControl1.SelectedIndexChanged += delegate(object sender, EventArgs e)
+            {
+                if (tabControl1.SelectedIndex == 2)
+                {
+                    if (textBox_Email.Text == "")
+                    {
+                        textBox_Email.Focus();
+                    }
+                    else
+                    {
+                        textBox_Pass.Focus();
+                    }
+                }
+            };
+
+            button_SignUp.Click += delegate(object sender, EventArgs e) { FrmSignUp Fsu = new FrmSignUp(); Fsu.ShowDialog(); };
+            button_ForgetPWD.Click += delegate(object sender, EventArgs e) { FrmForgetPWD FfPWD = new FrmForgetPWD(); FfPWD.ShowDialog(); };
+
+            textBox_Email.Text = Functions.Setting_Default.LoginEmail;
+
+            label_Hard.Text = "[CPUID:" + Functions.CPUCodeStr + " HardID:" + Functions.HardCodeStr + " USBID:" + Functions.USBCodeStr + "]";
+        }
+
+        private void ReloadSettingsAndUnits()
+        {
+            //加载设定
+            FreshDefaultSettingButtons();
+
+            //加载手动列表
+            FreshListview();
         }
 
         private void FrmSetting_Load(object sender, EventArgs e)
@@ -39,7 +105,6 @@ namespace parkssword
             if (textBox1.Text.IndexOf(this.ProductVersion) == -1)
             {
                 textBox1.AppendText(Environment.NewLine + "Version:" + this.ProductVersion);
-                Functions.AccountStatu.RefreshDone = true;
             }
         }
 
@@ -78,6 +143,7 @@ namespace parkssword
                 Lv.SubItems.Add(Functions.ManualItemsLst[i].LockCPU.ToString());
                 Lv.SubItems.Add(Functions.ManualItemsLst[i].LockHard.ToString());
                 Lv.SubItems.Add(Functions.ManualItemsLst[i].LockUSB.ToString());
+                Lv.SubItems.Add(Functions.ManualItemsLst[i].TimeStamp);
                 listView1.Items.Add(Lv);
             }
         }
@@ -100,6 +166,7 @@ namespace parkssword
                 FM.LockCPU = Convert.ToBoolean(listView1.Items[i].SubItems[4].Text);
                 FM.LockHard = Convert.ToBoolean(listView1.Items[i].SubItems[5].Text);
                 FM.LockUSB = Convert.ToBoolean(listView1.Items[i].SubItems[6].Text);
+                FM.TimeStamp = listView1.Items[i].SubItems[7].Text;
                 Functions.ManualItemsLst.Add(FM);
             }
         }
@@ -279,7 +346,7 @@ namespace parkssword
             Functions.Setting_Default.LockHard = Convert.ToBoolean(checkBox2.Checked);
             Functions.Setting_Default.LockUSB = Convert.ToBoolean(checkBox1.Checked);
 
-            Functions.Setting_Default.LoginEmail = Functions.EmailID;
+            Functions.Setting_Default.LoginEmail = textBox_Email.Text;
 
             Functions.SaveCodeBaseXML(UpdateTimeStamp);
         }
@@ -306,162 +373,34 @@ namespace parkssword
         }
 
         /// <summary>
-        /// 刷新状态
-        /// </summary>
-        void RefreshStatu()
-        {
-            if (Functions.EmailID != "" && Functions.EmailID != null && Functions.Login)
-            {
-                //判定绑定情况
-                bool IsSignUp = Functions.AccountStatu.SignUp;
-                bool IsBDWeixin = Functions.AccountStatu.Weixin;
-
-                //加载图片
-                pictureBox3.Image = IsSignUp ? imageList1.Images[0] : imageList1.Images[1];
-                pictureBox1.Image = IsBDWeixin ? imageList1.Images[0] : imageList1.Images[1];
-
-                //填写按钮文字
-                button_BD_Email.Enabled = true;
-                if (IsSignUp)
-                {
-                    //恢复默认
-                    button_BD_WeChat.Enabled = true;
-
-                    label8.Text = "已经绑定：" + Functions.EmailID;
-                    button_BD_Email.Text = "更换";
-
-                    button_BD_WeChat.Text = IsBDWeixin ? "更换" : "绑定";
-                    if (IsBDWeixin) label6.Text = "已经绑定微信帐号";
-                }
-                else
-                {
-                    label8.Text = "帐号：" + Functions.EmailID + "尚未激活";
-                    button_BD_Email.Text = "激活";
-                    button_BD_WeChat.Enabled = false;
-
-                    button_BD_WeChat.Text = "请先激活Email";
-                }
-            }
-            else
-            {
-                pictureBox3.Image = imageList1.Images[2];
-                pictureBox1.Image = imageList1.Images[2];
-
-                label8.Text = "绑定Email号，用以登录云端账号";
-
-                button_BD_Email.Text = "绑定";
-                button_BD_WeChat.Text = "绑定";
-
-                button_BD_Email.Enabled = false;
-                button_BD_WeChat.Enabled = false;
-            }
-
-            panel4.Visible = !Functions.Login;
-        }
-
-        /// <summary>
-        /// 登录线程
-        /// </summary>
-        void LoginThread()
-        {
-            try
-            {
-                Control.CheckForIllegalCrossThreadCalls = false;
-
-                label9.Text = "正在登录...";
-
-                string Email = textBox2.Text.Trim();
-                string PassWord = textBox3.Text.Trim();
-
-                textBox2.Enabled = false;
-                textBox3.Enabled = false;
-
-                string Src = Functions.GetSource("http://parkssword.sinaapp.com/Login.php?Email=" + Email + "&PassWord=" + MD5.PasswordFormat(PassWord) + "&CPUID=" + Functions.CPUCodeStr);
-                //模拟返回值 -> 测试结束后删除！！
-                //string Src = "SUCC![SignUp=1][Weixin=testID][Phone=]";
-
-                //处理PHP返回信息
-                if (Src.Contains("SUCC!"))
-                {
-                    Functions.EmailID = textBox2.Text.Trim();
-
-                    int SignUp_Fst = Src.IndexOf("[SignUp=");
-                    int SignUp_Lst = Src.IndexOf("]", SignUp_Fst);
-                    string SignUp = "";
-                    if (SignUp_Fst != -1 && SignUp_Lst != -1 && SignUp_Fst < SignUp_Lst)
-                    {
-                        SignUp = Src.Substring(SignUp_Fst + "[SignUp=".Length, SignUp_Lst - SignUp_Fst - "[SignUp=".Length);
-                    }
-                    Functions.AccountStatu.SignUp = SignUp == "0" ? false : true;
-
-                    int Weixin_Fst = Src.IndexOf("[Weixin=");
-                    int Weixin_Lst = Src.IndexOf("]", Weixin_Fst);
-                    string Weixin = "";
-                    if (Weixin_Fst != -1 && Weixin_Lst != -1 && Weixin_Fst < Weixin_Lst)
-                    {
-                        Weixin = Src.Substring(Weixin_Fst + "[Weixin=".Length, Weixin_Lst - Weixin_Fst - "[Weixin=".Length).Trim();
-                    }
-                    Functions.AccountStatu.Weixin = Weixin.Trim() == "" ? false : true;
-
-                    label9.Text = "登录成功";
-                    textBox2.Text = "";
-                    textBox3.Text = "";
-                    Functions.Login = true;
-                    button_Refresh.Enabled = true;
-                    SaveSettingS(false);
-                }
-                else if (Src.Contains("Wrong UserName or Password"))
-                {
-                    //登录失败
-                    throw new Exception("错误的用户名或密码");
-                }
-                else
-                {
-                    //登录失败
-                    throw new Exception("未知错误");
-                }
-            }
-            catch (Exception E)
-            {
-                Functions.Login = false;
-                label9.Text = E.Message;
-            }
-            finally
-            {
-                textBox2.Enabled = true;
-                textBox3.Enabled = true;
-                panel4.Visible = !Functions.Login;
-
-                RefreshStatu();
-            }
-        }
-
-        /// <summary>
         /// 执行同步线程
         /// </summary>
         void DoSynchronizationThread()
         {
-            if (textBox4.Text != "")
-            {
-                Thread oThread = new Thread(new ThreadStart(SynchronizationThread));
-                oThread.IsBackground = true;
-                oThread.Start();
-            }
-            else
-            {
-                label9.Text = "请输入密码";
-            }
+            if (textBox_Email.Text.Trim() == "") throw new Exception("请输入帐号");
+            if (textBox_Pass.Text == "") throw new Exception("请输入密码");
+
+            Functions.Setting_Default.LoginEmail = textBox_Email.Text;
+            Thread oThread = new Thread(new ThreadStart(SynchronizationThread));
+            oThread.IsBackground = true;
+            oThread.Start();
         }
 
-        public static String LoadManualItems2StrData()
+        //转换列表为String格式用于Post
+        public static string LoadManualItems2StrData()
         {
             StringBuilder SB = new StringBuilder("#Setting#@" + Functions.Setting_Default.TimeStamp
                     + "#@#" + Functions.Setting_Default.Length + "#@#" + Functions.Setting_Default.MD5Times
                     + "#@#" + Functions.Setting_Default.LockCPU
                     + "#@#" + Functions.Setting_Default.LockHard
                     + "#@#" + Functions.Setting_Default.LockUSB
-                    + "#@#" + Functions.CPUCodeStr + "#@#" + Functions.HardCodeStr + "#@#" + Functions.USBCodeStr + "@#Setting#");
+                    + "@#Setting#");
 
+            List<Functions.ManualItems> Lst2Str = Functions.ManualItemsLst;
+            foreach (Functions.ManualItems Item in Lst2Str)
+            {
+                SB.Append("#Unit#@" + Item.Domin + "#@#" + Item.TimeStamp + "#@#" + Item.PWDPool + "#@#" + Item.Length + "#@#" + Item.MD5Times + "#@#" + Item.LockCPU + "#@#" + Item.LockHard + "#@#" + Item.LockUSB + "@#Unit#");
+            }
 
             return SB.ToString();
         }
@@ -475,21 +414,17 @@ namespace parkssword
             {
                 Control.CheckForIllegalCrossThreadCalls = false;
 
-                label9.Text = "正在同步...";
+                label_BBS.Text = "正在同步...";
 
-                button_Synchronization.Enabled = false;
-                textBox4.Enabled = false;
+                textBox_Email.Enabled = false;
+                textBox_Pass.Enabled = false;
 
                 #region 提交POST请求
                 string Src = string.Empty;
-                string XMLData = string.Empty;
-                using (StreamReader SR = new StreamReader(Application.StartupPath + Functions.UserPWDsPath))
-                {
-                    XMLData = SR.ReadToEnd();
-                }
+                string PostData = LoadManualItems2StrData();
 
-                byte[] byteArray = Encoding.GetEncoding("gb2312").GetBytes(XMLData);
-                HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(new Uri("http://parkssword.sinaapp.com/XmlFresh.php?Email=" + Functions.EmailID + "&PassWord=" + MD5.PasswordFormat(textBox4.Text) + "&CPUID=" + Functions.CPUCodeStr + "&HardID=" + Functions.HardCodeStr + "&USBID=" + Functions.USBCodeStr));
+                byte[] byteArray = Encoding.GetEncoding("gb2312").GetBytes(PostData);
+                HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(new Uri("http://pss.codeeer.com/StrFresh.php?Email=" + textBox_Email.Text + "&PassWord=" + MD5.PasswordFormat(textBox_Pass.Text) + "&DeviceID=Windows:" + Functions.CPUCodeStr));
 
                 webReq.Method = "POST";
                 webReq.ContentType = "application/octet-stream";
@@ -508,236 +443,73 @@ namespace parkssword
                 }
                 #endregion
 
-                //更换
-                if (Src.Trim().Contains("SUCC!"))
-                {
-                    //成功
-                    label9.Text = "同步成功 " + DateTime.Now.ToString("HH:mm:ss");
-                }
-                else if (Src.Trim().Contains("Wrong PassWord!"))
-                {
-                    throw new Exception("密码错误");
-                }
-                else if (Src.Trim().Contains("Missing Paras!"))
-                {
-                    throw new Exception("缺少参数");
-                }
-                else if (Src.Trim().Contains("Failed!"))
-                {
-                    throw new Exception("验证失败");
-                }
-                else
-                {
-                    throw new Exception("未知错误");
-                }
-            }
-            catch (Exception E)
-            {
-                label9.Text = E.Message;
-            }
-            finally
-            {
-                button_Synchronization.Enabled = true;
-                textBox4.Enabled = true;
-                textBox4.Text = "";
-            }
-        }
+                //处理从服务器下载的数据
+                if (!Src.Contains("#Head#") || !Src.Contains("#Tail#")) throw new Exception("数据校验失败，请重试！");
 
-        private void label10_Click(object sender, EventArgs e)
-        {
-            textBox2.Focus();
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-            textBox3.Focus();
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            label10.Visible = textBox2.Text == "" ? true : false;
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            label11.Visible = textBox3.Text == "" ? true : false;
-        }
-
-        private void button_Extend_Click(object sender, EventArgs e)
-        {
-            splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
-            panel2.Enabled = !panel2.Enabled;
-            button_Extend.Text = button_Extend.Text == "<" ? ">" : "<";
-        }
-
-        private void textBox3_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (textBox2.Text != "" && textBox3.Text != "")
+                if (Src.Contains("SUCC!"))
                 {
-                    if (Functions.IsEmail(textBox2.Text))
+                    Regex pattern_Unit = new Regex("#Unit#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Unit#");
+                    MatchCollection matcher_Unit = pattern_Unit.Matches(Src);
+
+                    Regex pattern_Setting = new Regex("#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#");
+                    MatchCollection matcher_Setting = pattern_Setting.Matches(Src);
+
+                    if (matcher_Setting.Count == 1)
                     {
-                        Thread oThread = new Thread(new ThreadStart(LoginThread));
-                        oThread.IsBackground = true;
-                        oThread.Start();
+                        Functions.Setting_Default.TimeStamp = matcher_Setting[0].Groups[1].Value;
+                        Functions.Setting_Default.Length = Convert.ToInt16(matcher_Setting[0].Groups[2].Value);
+                        Functions.Setting_Default.MD5Times = Convert.ToInt16(matcher_Setting[0].Groups[3].Value);
+                        Functions.Setting_Default.LockCPU = Convert.ToBoolean(matcher_Setting[0].Groups[4].Value);
+                        Functions.Setting_Default.LockHard = Convert.ToBoolean(matcher_Setting[0].Groups[5].Value);
+                        Functions.Setting_Default.LockUSB = Convert.ToBoolean(matcher_Setting[0].Groups[6].Value);
                     }
                     else
                     {
-                        label9.Text = "Email格式错误";
+                        throw new Exception("配置参数获取失败，请重试！");
                     }
+
+                    Functions.ManualItemsLst.Clear();
+
+                    foreach(Match Mc in matcher_Unit)
+                    {
+                        //写入Functions.ManualItemsLst列表
+                        Functions.ManualItems FM = new Functions.ManualItems();
+                        FM.Domin = Mc.Groups[1].Value;
+                        FM.TimeStamp = Mc.Groups[2].Value;
+                        FM.PWDPool = Mc.Groups[3].Value;
+                        FM.Length = Convert.ToInt16(Mc.Groups[4].Value);
+                        FM.MD5Times = Convert.ToInt16(Mc.Groups[5].Value);
+                        FM.LockCPU = Convert.ToBoolean(Mc.Groups[6].Value);
+                        FM.LockHard = Convert.ToBoolean(Mc.Groups[7].Value);
+                        FM.LockUSB = Convert.ToBoolean(Mc.Groups[8].Value);
+
+                        Functions.ManualItemsLst.Add(FM);
+                    }
+
+                    label_BBS.Text = "同步成功 " + DateTime.Now.ToString("HH:mm:ss");
+                }
+                else if (Src.IndexOf("Wrong UserName or Password!") == 0)
+                {
+                    throw new Exception("用户名或密码错误");
                 }
                 else
                 {
-                    label9.Text = "请完整输入用户名和密码";
-                }
-            }
-        }
-
-        private void tabControl3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!Functions.Login)
-            {
-                if (tabControl3.SelectedIndex != 0)
-                {
-                    MessageBox.Show("请先登录", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    tabControl3.SelectedIndex = 0;
-                }
-            }
-        }
-
-        private void button_CheckUpdate_Click_1(object sender, EventArgs e)
-        {
-            CheckUpdateAndLoginS SS = new CheckUpdateAndLoginS(ProductVersion.ToString());
-            SS.LoginS();
-            SS.CheckUpdate(button_CheckUpdate);
-        }
-
-        private void button_BD_Email_Click(object sender, EventArgs e)
-        {
-            Bind_Email BE = new Bind_Email();
-            BE.ShowDialog();
-
-            Functions.AccountStatu.Refresh();
-            timer_CheckStatu.Enabled = true;
-        }
-
-        private void button_BD_WeChat_Click(object sender, EventArgs e)
-        {
-            Link2Weixin LW = new Link2Weixin();
-            LW.ShowDialog();
-
-            Functions.AccountStatu.Refresh();
-            timer_CheckStatu.Enabled = true;
-        }
-
-        void LogOut(bool Silence = false, bool ClsUser = true)
-        {
-            Functions.Login = false;
-            if (ClsUser) Functions.EmailID = null;
-            RefreshStatu();
-            button_Refresh.Enabled = false;
-            SaveSettingS(false);
-            if (!Silence)
-            {
-                label9.Text = "已经退出登录";
-                MessageBox.Show("成功退出登录", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void button_LogOut_Click(object sender, EventArgs e)
-        {
-            LogOut();
-        }
-
-        private void button_SignUp_Click(object sender, EventArgs e)
-        {
-            FrmSignUp Fsu = new FrmSignUp();
-            Fsu.ShowDialog();
-        }
-
-        private void button_ForgetPWD_Click(object sender, EventArgs e)
-        {
-            FrmForgetPWD FfPWD = new FrmForgetPWD();
-            FfPWD.ShowDialog();
-        }
-
-        private void timer_CheckStatu_Tick(object sender, EventArgs e)
-        {
-            if (Functions.AccountStatu.RefreshDone)
-            {
-                label10.Visible = true;
-                label11.Visible = true;
-                label9.Text = "状态已经刷新";
-                tabControl3.Enabled = true;
-                button_Refresh.Enabled = true;
-                Functions.Login = !Functions.AccountStatu.Error;
-                if (Functions.AccountStatu.Error)
-                {
-                    label9.Text = Functions.AccountStatu.ErrorStr;
-                    LogOut(true, false);
+                    throw new Exception("数据同步失败（" + Src.Length + "）");
                 }
 
-                timer_CheckStatu.Enabled = false;
-                RefreshStatu();
+                SaveSettingS(false);
+
+                ReloadSettingsAndUnits();
             }
-            else
+            catch (Exception E)
             {
-                label10.Visible = false;
-                label11.Visible = false;
-                tabControl3.Enabled = false;
-                button_Refresh.Enabled = false;
-                label9.Text = "正在刷新状态...";
+                label_BBS.Text = E.Message;
             }
-        }
-
-        private void button_Refresh_Click(object sender, EventArgs e)
-        {
-            Functions.AccountStatu.Refresh();
-            timer_CheckStatu.Enabled = true;
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-            label7.Visible = textBox4.Text.Trim() != string.Empty ? false : true;
-        }
-
-        private void button_Synchronization_Click(object sender, EventArgs e)
-        {
-            DoSynchronizationThread();
-        }
-
-        private void textBox4_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
+            finally
             {
-                DoSynchronizationThread();
-            }
-        }
-
-        bool HasLoad = false;
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedIndex == 2 && !HasLoad && Functions.AccountStatu.RefreshDone)
-            {
-                HasLoad = true;
-
-                //如果已经保留帐号，就直接登录
-                if (Functions.Setting_Default.LoginEmail != null) Functions.EmailID = Functions.Setting_Default.LoginEmail;
-
-                if (Functions.EmailID == "" || Functions.EmailID == null)
-                {
-                    pictureBox1.Image = imageList1.Images[2];
-                    pictureBox3.Image = imageList1.Images[2];
-                }
-                else
-                {
-                    //如果已经登录，就直接加载细节
-                    Functions.AccountStatu.Refresh();
-                    button_Refresh.Enabled = true;
-                    timer_CheckStatu.Enabled = true;
-                }
+                textBox_Email.Enabled = true;
+                textBox_Pass.Enabled = true;
+                textBox_Pass.Text = "";
             }
         }
     }

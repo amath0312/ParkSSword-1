@@ -26,7 +26,7 @@ if(isset($Email) && isset($PassWord))
 		if(isset($StrData))
 		{
 			$DataFormat='/#Unit#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Unit#/';
-			$DataFormat_Setting='/#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#/';
+			$DataFormat_Setting='/#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#/';
 
 			//加载移动终端数据
 			preg_match_all($DataFormat, $StrData, $AndroidData);

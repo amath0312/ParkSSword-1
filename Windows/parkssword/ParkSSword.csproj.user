@@ -3,4 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartArguments>[debug]cpuid=BFEBFBFF000206A7&amp;hardid=3251C23E</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>[debug]cpuid=11111FFFFF00000A&amp;hardid=AAABBCCD</StartArguments>
+  </PropertyGroup>
 </Project>

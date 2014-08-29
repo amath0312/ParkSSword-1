@@ -67,18 +67,17 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.button_Refresh = new System.Windows.Forms.Button();
-            this.tabControl3 = new System.Windows.Forms.TabControl();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label_Hard = new System.Windows.Forms.Label();
+            this.label_BBS = new System.Windows.Forms.Label();
+            this.label_Pass = new System.Windows.Forms.Label();
+            this.textBox_Pass = new System.Windows.Forms.TextBox();
+            this.label_Email = new System.Windows.Forms.Label();
+            this.textBox_Email = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
             this.button_LogOut = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -86,25 +85,12 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.button_ForgetPWD = new System.Windows.Forms.Button();
             this.button_SignUp = new System.Windows.Forms.Button();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
-            this.button_BD_WeChat = new System.Windows.Forms.Button();
-            this.button_BD_Email = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tabPage9 = new System.Windows.Forms.TabPage();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.button_Synchronization = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button_CheckUpdate = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button_MeFocus = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.timer_CheckStatu = new System.Windows.Forms.Timer(this.components);
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -116,22 +102,16 @@
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.tabPage6.SuspendLayout();
-            this.tabControl3.SuspendLayout();
-            this.tabPage7.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.tabPage8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.tabPage9.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -150,7 +130,6 @@
             this.tabControl1.Size = new System.Drawing.Size(551, 298);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage3
             // 
@@ -173,7 +152,8 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6,
-            this.columnHeader7});
+            this.columnHeader7,
+            this.columnHeader8});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(3, 28);
@@ -539,9 +519,7 @@
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.button_Refresh);
-            this.tabPage6.Controls.Add(this.tabControl3);
-            this.tabPage6.Controls.Add(this.label9);
+            this.tabPage6.Controls.Add(this.splitContainer1);
             this.tabPage6.Location = new System.Drawing.Point(4, 29);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(543, 265);
@@ -549,56 +527,10 @@
             this.tabPage6.Text = "云同步";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // button_Refresh
-            // 
-            this.button_Refresh.Enabled = false;
-            this.button_Refresh.Image = ((System.Drawing.Image)(resources.GetObject("button_Refresh.Image")));
-            this.button_Refresh.Location = new System.Drawing.Point(484, 220);
-            this.button_Refresh.Name = "button_Refresh";
-            this.button_Refresh.Size = new System.Drawing.Size(24, 24);
-            this.button_Refresh.TabIndex = 4;
-            this.button_Refresh.UseVisualStyleBackColor = true;
-            this.button_Refresh.Click += new System.EventHandler(this.button_Refresh_Click);
-            // 
-            // tabControl3
-            // 
-            this.tabControl3.Controls.Add(this.tabPage7);
-            this.tabControl3.Controls.Add(this.tabPage8);
-            this.tabControl3.Controls.Add(this.tabPage9);
-            this.tabControl3.ItemSize = new System.Drawing.Size(100, 22);
-            this.tabControl3.Location = new System.Drawing.Point(19, 14);
-            this.tabControl3.Name = "tabControl3";
-            this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(502, 193);
-            this.tabControl3.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            this.tabControl3.TabIndex = 3;
-            this.tabControl3.SelectedIndexChanged += new System.EventHandler(this.tabControl3_SelectedIndexChanged);
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Controls.Add(this.groupBox2);
-            this.tabPage7.Location = new System.Drawing.Point(4, 26);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(494, 163);
-            this.tabPage7.TabIndex = 0;
-            this.tabPage7.Text = "登录";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.splitContainer1);
-            this.groupBox2.Location = new System.Drawing.Point(-1, -20);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(496, 186);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "登录云端";
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 19);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -609,9 +541,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
             this.splitContainer1.Panel2Collapsed = true;
-            this.splitContainer1.Size = new System.Drawing.Size(490, 164);
+            this.splitContainer1.Size = new System.Drawing.Size(543, 265);
             this.splitContainer1.SplitterDistance = 393;
-            this.splitContainer1.TabIndex = 1;
+            this.splitContainer1.TabIndex = 2;
             // 
             // tableLayoutPanel1
             // 
@@ -625,7 +557,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(490, 164);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(543, 265);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel2
@@ -635,67 +567,95 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(459, 158);
+            this.panel2.Size = new System.Drawing.Size(512, 259);
             this.panel2.TabIndex = 0;
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.label11);
-            this.panel4.Controls.Add(this.textBox3);
-            this.panel4.Controls.Add(this.label10);
-            this.panel4.Controls.Add(this.textBox2);
-            this.panel4.Location = new System.Drawing.Point(9, 14);
+            this.panel4.Controls.Add(this.groupBox1);
+            this.panel4.Controls.Add(this.label_BBS);
+            this.panel4.Controls.Add(this.label_Pass);
+            this.panel4.Controls.Add(this.textBox_Pass);
+            this.panel4.Controls.Add(this.label_Email);
+            this.panel4.Controls.Add(this.textBox_Email);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(441, 126);
+            this.panel4.Size = new System.Drawing.Size(512, 259);
             this.panel4.TabIndex = 5;
             // 
-            // label11
+            // groupBox1
             // 
-            this.label11.AutoSize = true;
-            this.label11.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.label11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label11.ForeColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label11.Location = new System.Drawing.Point(291, 84);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(134, 21);
-            this.label11.TabIndex = 4;
-            this.label11.Text = "验证PSS登录密码";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
+            this.groupBox1.Controls.Add(this.label_Hard);
+            this.groupBox1.Location = new System.Drawing.Point(43, 202);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(419, 41);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "硬件信息清单";
             // 
-            // textBox3
+            // label_Hard
             // 
-            this.textBox3.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.ForeColor = System.Drawing.Color.DarkGreen;
-            this.textBox3.Location = new System.Drawing.Point(12, 76);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.PasswordChar = '●';
-            this.textBox3.Size = new System.Drawing.Size(419, 37);
-            this.textBox3.TabIndex = 1;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            this.textBox3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox3_KeyDown);
+            this.label_Hard.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Hard.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.label_Hard.Location = new System.Drawing.Point(5, 16);
+            this.label_Hard.Name = "label_Hard";
+            this.label_Hard.Size = new System.Drawing.Size(408, 19);
+            this.label_Hard.TabIndex = 0;
+            this.label_Hard.Text = "[]";
+            this.label_Hard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label10
+            // label_BBS
             // 
-            this.label10.AutoSize = true;
-            this.label10.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.label10.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.ForeColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label10.Location = new System.Drawing.Point(374, 20);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(51, 21);
-            this.label10.TabIndex = 3;
-            this.label10.Text = "Email";
-            this.label10.Click += new System.EventHandler(this.label10_Click);
+            this.label_BBS.Location = new System.Drawing.Point(40, 148);
+            this.label_BBS.Name = "label_BBS";
+            this.label_BBS.Size = new System.Drawing.Size(422, 39);
+            this.label_BBS.TabIndex = 5;
+            this.label_BBS.Text = "输入密码后按回车执行同步";
+            this.label_BBS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // textBox2
+            // label_Pass
             // 
-            this.textBox2.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.textBox2.Location = new System.Drawing.Point(12, 12);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(419, 37);
-            this.textBox2.TabIndex = 0;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.label_Pass.AutoSize = true;
+            this.label_Pass.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.label_Pass.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_Pass.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label_Pass.Location = new System.Drawing.Point(416, 103);
+            this.label_Pass.Name = "label_Pass";
+            this.label_Pass.Size = new System.Drawing.Size(42, 21);
+            this.label_Pass.TabIndex = 4;
+            this.label_Pass.Text = "密码";
+            // 
+            // textBox_Pass
+            // 
+            this.textBox_Pass.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Pass.ForeColor = System.Drawing.Color.DarkGreen;
+            this.textBox_Pass.Location = new System.Drawing.Point(43, 95);
+            this.textBox_Pass.Name = "textBox_Pass";
+            this.textBox_Pass.PasswordChar = '●';
+            this.textBox_Pass.Size = new System.Drawing.Size(419, 37);
+            this.textBox_Pass.TabIndex = 1;
+            // 
+            // label_Email
+            // 
+            this.label_Email.AutoSize = true;
+            this.label_Email.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.label_Email.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_Email.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.label_Email.Location = new System.Drawing.Point(407, 37);
+            this.label_Email.Name = "label_Email";
+            this.label_Email.Size = new System.Drawing.Size(51, 21);
+            this.label_Email.TabIndex = 3;
+            this.label_Email.Text = "Email";
+            // 
+            // textBox_Email
+            // 
+            this.textBox_Email.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_Email.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.textBox_Email.Location = new System.Drawing.Point(43, 31);
+            this.textBox_Email.Name = "textBox_Email";
+            this.textBox_Email.Size = new System.Drawing.Size(419, 37);
+            this.textBox_Email.TabIndex = 0;
             // 
             // panel5
             // 
@@ -713,15 +673,14 @@
             this.button_LogOut.TabIndex = 0;
             this.button_LogOut.Text = "退出登录";
             this.button_LogOut.UseVisualStyleBackColor = true;
-            this.button_LogOut.Click += new System.EventHandler(this.button_LogOut_Click);
             // 
             // panel3
             // 
             this.panel3.Controls.Add(this.button_Extend);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel3.Location = new System.Drawing.Point(468, 3);
+            this.panel3.Location = new System.Drawing.Point(521, 3);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(19, 158);
+            this.panel3.Size = new System.Drawing.Size(19, 259);
             this.panel3.TabIndex = 1;
             // 
             // button_Extend
@@ -729,11 +688,10 @@
             this.button_Extend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button_Extend.Location = new System.Drawing.Point(0, 0);
             this.button_Extend.Name = "button_Extend";
-            this.button_Extend.Size = new System.Drawing.Size(19, 158);
+            this.button_Extend.Size = new System.Drawing.Size(19, 259);
             this.button_Extend.TabIndex = 2;
             this.button_Extend.Text = "<";
             this.button_Extend.UseVisualStyleBackColor = true;
-            this.button_Extend.Click += new System.EventHandler(this.button_Extend_Click);
             // 
             // panel1
             // 
@@ -747,163 +705,21 @@
             // 
             // button_ForgetPWD
             // 
-            this.button_ForgetPWD.Location = new System.Drawing.Point(2, 85);
+            this.button_ForgetPWD.Location = new System.Drawing.Point(31, 98);
             this.button_ForgetPWD.Name = "button_ForgetPWD";
-            this.button_ForgetPWD.Size = new System.Drawing.Size(84, 74);
+            this.button_ForgetPWD.Size = new System.Drawing.Size(84, 37);
             this.button_ForgetPWD.TabIndex = 1;
             this.button_ForgetPWD.Text = "忘记密码";
             this.button_ForgetPWD.UseVisualStyleBackColor = true;
-            this.button_ForgetPWD.Click += new System.EventHandler(this.button_ForgetPWD_Click);
             // 
             // button_SignUp
             // 
-            this.button_SignUp.Location = new System.Drawing.Point(2, 7);
+            this.button_SignUp.Location = new System.Drawing.Point(31, 34);
             this.button_SignUp.Name = "button_SignUp";
-            this.button_SignUp.Size = new System.Drawing.Size(84, 74);
+            this.button_SignUp.Size = new System.Drawing.Size(84, 37);
             this.button_SignUp.TabIndex = 0;
             this.button_SignUp.Text = "注册";
             this.button_SignUp.UseVisualStyleBackColor = true;
-            this.button_SignUp.Click += new System.EventHandler(this.button_SignUp_Click);
-            // 
-            // tabPage8
-            // 
-            this.tabPage8.Controls.Add(this.button_BD_WeChat);
-            this.tabPage8.Controls.Add(this.button_BD_Email);
-            this.tabPage8.Controls.Add(this.label8);
-            this.tabPage8.Controls.Add(this.pictureBox3);
-            this.tabPage8.Controls.Add(this.label6);
-            this.tabPage8.Controls.Add(this.pictureBox1);
-            this.tabPage8.Location = new System.Drawing.Point(4, 26);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage8.Size = new System.Drawing.Size(494, 163);
-            this.tabPage8.TabIndex = 1;
-            this.tabPage8.Text = "绑定信息";
-            this.tabPage8.UseVisualStyleBackColor = true;
-            // 
-            // button_BD_WeChat
-            // 
-            this.button_BD_WeChat.Enabled = false;
-            this.button_BD_WeChat.Location = new System.Drawing.Point(392, 92);
-            this.button_BD_WeChat.Name = "button_BD_WeChat";
-            this.button_BD_WeChat.Size = new System.Drawing.Size(80, 32);
-            this.button_BD_WeChat.TabIndex = 13;
-            this.button_BD_WeChat.Text = "绑定";
-            this.button_BD_WeChat.UseVisualStyleBackColor = true;
-            this.button_BD_WeChat.Click += new System.EventHandler(this.button_BD_WeChat_Click);
-            // 
-            // button_BD_Email
-            // 
-            this.button_BD_Email.Enabled = false;
-            this.button_BD_Email.Location = new System.Drawing.Point(392, 32);
-            this.button_BD_Email.Name = "button_BD_Email";
-            this.button_BD_Email.Size = new System.Drawing.Size(80, 32);
-            this.button_BD_Email.TabIndex = 12;
-            this.button_BD_Email.Text = "绑定";
-            this.button_BD_Email.UseVisualStyleBackColor = true;
-            this.button_BD_Email.Click += new System.EventHandler(this.button_BD_Email_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(68, 40);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(183, 17);
-            this.label8.TabIndex = 11;
-            this.label8.Text = "绑定Email号，用以登录云端账号";
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Location = new System.Drawing.Point(23, 32);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox3.TabIndex = 10;
-            this.pictureBox3.TabStop = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(68, 99);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(296, 17);
-            this.label6.TabIndex = 7;
-            this.label6.Text = "绑定微信账号，上传手动列表后您就使用微信获取密码";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(23, 92);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
-            // tabPage9
-            // 
-            this.tabPage9.Controls.Add(this.label12);
-            this.tabPage9.Controls.Add(this.label7);
-            this.tabPage9.Controls.Add(this.textBox4);
-            this.tabPage9.Controls.Add(this.button_Synchronization);
-            this.tabPage9.Location = new System.Drawing.Point(4, 26);
-            this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(494, 163);
-            this.tabPage9.TabIndex = 2;
-            this.tabPage9.Text = "同步数据";
-            this.tabPage9.UseVisualStyleBackColor = true;
-            // 
-            // label12
-            // 
-            this.label12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label12.Location = new System.Drawing.Point(38, 28);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(424, 44);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "同步本地基础数据";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.ForeColor = System.Drawing.SystemColors.ActiveBorder;
-            this.label7.Location = new System.Drawing.Point(166, 102);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(134, 21);
-            this.label7.TabIndex = 16;
-            this.label7.Text = "验证PSS登录密码";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Font = new System.Drawing.Font("Verdana", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.ForeColor = System.Drawing.Color.DarkGreen;
-            this.textBox4.Location = new System.Drawing.Point(67, 95);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.PasswordChar = '●';
-            this.textBox4.Size = new System.Drawing.Size(238, 37);
-            this.textBox4.TabIndex = 15;
-            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
-            this.textBox4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox4_KeyDown);
-            // 
-            // button_Synchronization
-            // 
-            this.button_Synchronization.Location = new System.Drawing.Point(339, 95);
-            this.button_Synchronization.Name = "button_Synchronization";
-            this.button_Synchronization.Size = new System.Drawing.Size(80, 38);
-            this.button_Synchronization.TabIndex = 14;
-            this.button_Synchronization.Text = "同步";
-            this.button_Synchronization.UseVisualStyleBackColor = true;
-            this.button_Synchronization.Click += new System.EventHandler(this.button_Synchronization_Click);
-            // 
-            // label9
-            // 
-            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label9.Location = new System.Drawing.Point(19, 220);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(459, 24);
-            this.label9.TabIndex = 2;
-            this.label9.Text = "输入密码后按回车登录";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabPage2
             // 
@@ -925,7 +741,6 @@
             this.button_CheckUpdate.TabIndex = 1;
             this.button_CheckUpdate.Text = "检查更新";
             this.button_CheckUpdate.UseVisualStyleBackColor = true;
-            this.button_CheckUpdate.Click += new System.EventHandler(this.button_CheckUpdate_Click_1);
             // 
             // textBox1
             // 
@@ -958,9 +773,10 @@
             this.imageList1.Images.SetKeyName(1, "1377781687_exclamation-circle_red.png");
             this.imageList1.Images.SetKeyName(2, "1367994071_onebit_36.png");
             // 
-            // timer_CheckStatu
+            // columnHeader8
             // 
-            this.timer_CheckStatu.Tick += new System.EventHandler(this.timer_CheckStatu_Tick);
+            this.columnHeader8.Text = "TimeStamp";
+            this.columnHeader8.Width = 0;
             // 
             // FrmSetting
             // 
@@ -993,9 +809,6 @@
             this.tabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.tabPage6.ResumeLayout(false);
-            this.tabControl3.ResumeLayout(false);
-            this.tabPage7.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -1003,15 +816,10 @@
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.tabPage8.ResumeLayout(false);
-            this.tabPage8.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.tabPage9.ResumeLayout(false);
-            this.tabPage9.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
@@ -1061,39 +869,25 @@
         private System.Windows.Forms.Button button_SaveSetting;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.TabControl tabControl3;
-        private System.Windows.Forms.TabPage tabPage7;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button button_CheckUpdate;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label_Pass;
+        private System.Windows.Forms.TextBox textBox_Pass;
+        private System.Windows.Forms.Label label_Email;
+        private System.Windows.Forms.TextBox textBox_Email;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Button button_LogOut;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button button_Extend;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button_ForgetPWD;
         private System.Windows.Forms.Button button_SignUp;
-        private System.Windows.Forms.TabPage tabPage8;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button_CheckUpdate;
-        private System.Windows.Forms.Button button_BD_WeChat;
-        private System.Windows.Forms.Button button_BD_Email;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Button button_LogOut;
-        private System.Windows.Forms.Timer timer_CheckStatu;
-        private System.Windows.Forms.Button button_Refresh;
-        private System.Windows.Forms.TabPage tabPage9;
-        private System.Windows.Forms.Button button_Synchronization;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label_BBS;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label_Hard;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
     }
 }

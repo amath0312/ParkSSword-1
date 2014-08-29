@@ -276,11 +276,12 @@ public class MainActivity extends Activity implements TextWatcher {
 
                             String PhoneID = android.provider.Settings.System.getString(getContentResolver(), "android_id");
 
-                            URL url = new URL("http://pss.codeeer.com/StrFresh.php?Email=" + UserName + "&PassWord=" + PassWord + "&PhoneID=" + PhoneID);
+                            URL url = new URL("http://pss.codeeer.com/StrFresh.php?Email=" + UserName + "&PassWord=" + PassWord + "&DeviceID=Android:" + PhoneID);
                             content = "正在同步数据...";
                             handler.post(runnableUi);
                             String urlsource = PostData(url, HandleDB.ManualList.LoadManualItems2StrData());
-                            Log.e("数据返回值",urlsource);
+
+                            if(!urlsource.contains("#Head#")||!urlsource.contains("#Tail#")){throw new Exception("数据校验错误"); }
 
                             //处理数据
                             content = Source2Sqlite(urlsource, sh);
@@ -289,9 +290,8 @@ public class MainActivity extends Activity implements TextWatcher {
                             prodialog.cancel();
 
                         } catch (Exception e) {
-                            content = "数据加载失败";
+                            content = "失败：" + e.getMessage();
                             handler.post(runnableUi);
-                            Log.e("synchro", e.toString());
                         }
                     }
                 }.start();

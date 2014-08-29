@@ -1,0 +1,11 @@
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.csprojResolveAssemblyReference.cache
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.FrmForgetPWD.resources
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.FrmManualPWD.resources
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\parkssword.FrmSetting.resources
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.FrmSignUp.resources
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.USBSelect.resources
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.csproj.GenerateResource.Cache
+Z:\CODE\ParkSSword\Windows\PWDCore\bin\Debug\PWDCore.dll
+Z:\CODE\ParkSSword\Windows\PWDCore\bin\Debug\PWDCore.pdb
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.dll
+Z:\CODE\ParkSSword\Windows\PWDCore\obj\Debug\PWDCore.pdb

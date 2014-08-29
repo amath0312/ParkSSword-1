@@ -38,12 +38,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bind_Email.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bind_Email.Designer.cs">
-      <DependentUpon>Bind_Email.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmForgetPWD.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,12 +66,6 @@
     <Compile Include="InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Link2Weixin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Link2Weixin.Designer.cs">
-      <DependentUpon>Link2Weixin.cs</DependentUpon>
-    </Compile>
     <Compile Include="MD5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="USBSelect.cs">
@@ -88,9 +76,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Bind_Email.resx">
-      <DependentUpon>Bind_Email.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FrmForgetPWD.resx">
       <DependentUpon>FrmForgetPWD.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,9 +88,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmSignUp.resx">
       <DependentUpon>FrmSignUp.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Link2Weixin.resx">
-      <DependentUpon>Link2Weixin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="USBSelect.resx">
       <DependentUpon>USBSelect.cs</DependentUpon>

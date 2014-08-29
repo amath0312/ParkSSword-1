@@ -16,7 +16,7 @@ namespace parkssword
              */
 
             //调试模式
-            if (args[0].IndexOf("[debug]") != -1)
+            if (args.Length == 1 && args[0].IndexOf("[debug]") != -1)
             {
                 Functions.PickArgsStr(args[0].Substring(args[0].IndexOf("cpuid="), args[0].IndexOf("&") - args[0].IndexOf("cpuid=")), ref Functions.PreDefine_CPUCodeStr, "cpuid=");
                 Functions.PickArgsStr(args[0].Substring(args[0].IndexOf("hardid="), args[0].Length - args[0].IndexOf("hardid=")), ref Functions.PreDefine_HardCodeStr, "hardid=");

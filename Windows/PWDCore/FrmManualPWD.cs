@@ -117,6 +117,7 @@ namespace PWDCore
                     //写入Functions.ManualItemsLst列表
                     Functions.ManualItems FM = new Functions.ManualItems();
                     FM.Domin = DominName;
+                    FM.TimeStamp = DateTime.Now.ToString("yyyyMMddHHmm");
                     FM.PWDPool = Temp;
                     FM.Length = Convert.ToInt16(numericUpDown1.Value);
                     FM.MD5Times = Convert.ToInt16(numericUpDown2.Value);
@@ -137,6 +138,7 @@ namespace PWDCore
                     FrmS.listView1.Items[Need2ChangeLv].SubItems[4].Text = checkBox6.Checked.ToString();
                     FrmS.listView1.Items[Need2ChangeLv].SubItems[5].Text = checkBox8.Checked.ToString();
                     FrmS.listView1.Items[Need2ChangeLv].SubItems[6].Text = checkBox9.Checked.ToString();
+                    FrmS.listView1.Items[Need2ChangeLv].SubItems[7].Text = DateTime.Now.ToString("yyyyMMddHHmm");
 
                     FrmS.FreshManualItemsLst();
                 }

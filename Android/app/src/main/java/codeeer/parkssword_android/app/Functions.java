@@ -222,7 +222,7 @@ class HtmlRequest {
         byte[] data = params.getBytes();//获得请求体
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-            httpURLConnection.setConnectTimeout(3000);              //设置连接超时时间
+            httpURLConnection.setConnectTimeout(5000);              //设置连接超时时间
             httpURLConnection.setDoInput(true);                     //打开输入流，以便从服务器获取数据
             httpURLConnection.setDoOutput(true);                    //打开输出流，以便向服务器提交数据
             httpURLConnection.setRequestMethod("POST");             //设置以Post方式提交数据
@@ -294,7 +294,7 @@ class HtmlRequest {
             Pattern pattern_Unit = Pattern.compile("#Unit#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Unit#");
             Matcher matcher_Unit = pattern_Unit.matcher(Source);
 
-            Pattern pattern_Setting = Pattern.compile("#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#");
+            Pattern pattern_Setting = Pattern.compile("#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#");
             Matcher matcher_Setting = pattern_Setting.matcher(Source);
 
             boolean dropDateBase = false;
@@ -306,9 +306,9 @@ class HtmlRequest {
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(4))+"' WHERE Key = 'LockCPU_Default'");
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(5))+"' WHERE Key = 'LockHard_Default'");
                 db.execSQL("UPDATE Setting SET Value = '"+Boolean.parseBoolean(matcher_Setting.group(6))+"' WHERE Key = 'LockUSB_Default'");
-                db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(7)+"' WHERE Key = 'CPUID'");
-                db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(8)+"' WHERE Key = 'HardID'");
-                db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(9)+"' WHERE Key = 'USBID'");
+                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(7)+"' WHERE Key = 'CPUID'");//TODO Setting CPUID,HardID,USBID
+                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(8)+"' WHERE Key = 'HardID'");
+                //db.execSQL("UPDATE Setting SET Value = '"+matcher_Setting.group(9)+"' WHERE Key = 'USBID'");//
             }
 
             while (matcher_Unit.find()) {

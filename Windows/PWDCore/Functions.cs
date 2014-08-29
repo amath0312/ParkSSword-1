@@ -44,20 +44,6 @@ namespace PWDCore
 
         #endregion
 
-        #region 远端绑定数据
-
-        /// <summary>
-        /// 判定是否登录成功
-        /// </summary>
-        public static bool Login = false;
-
-        /// <summary>
-        /// Email账号
-        /// </summary>
-        public static string EmailID { get; set; }
-
-        #endregion
-
         /// <summary>
         /// 用户配置文件列表
         /// </summary>
@@ -102,6 +88,11 @@ namespace PWDCore
             /// 域名
             /// </summary>
             public string Domin;
+
+            /// <summary>
+            /// 时间戳
+            /// </summary>
+            public string TimeStamp;
 
             /// <summary>
             /// 密码池
@@ -222,13 +213,14 @@ namespace PWDCore
                         //以正常模式写入Functions.ManualItemsLst列表
                         Functions.ManualItems FM = new Functions.ManualItems();
                         FM.Domin = Lst[0].InnerText;
-                        FM.PWDPool = Lst[1].InnerText;
-                        FM.Length = Convert.ToInt16(Lst[2].InnerText);
-                        FM.MD5Times = Convert.ToInt16(Lst[3].InnerText);
-                        FM.LockCPU = Convert.ToBoolean(Lst[4].InnerText);
+                        FM.TimeStamp = Lst[1].InnerText;
+                        FM.PWDPool = Lst[2].InnerText;
+                        FM.Length = Convert.ToInt16(Lst[3].InnerText);
+                        FM.MD5Times = Convert.ToInt16(Lst[4].InnerText);
+                        FM.LockCPU = Convert.ToBoolean(Lst[5].InnerText);
 
-                        FM.LockHard = Convert.ToBoolean(Lst[5].InnerText);
-                        FM.LockUSB = Convert.ToBoolean(Lst[6].InnerText);
+                        FM.LockHard = Convert.ToBoolean(Lst[6].InnerText);
+                        FM.LockUSB = Convert.ToBoolean(Lst[7].InnerText);
 
                         Functions.ManualItemsLst.Add(FM);
                     }
@@ -243,7 +235,7 @@ namespace PWDCore
         /// <summary>
         ///  保存配置文件
         /// </summary>
-        public static void SaveCodeBaseXML(bool UpdateTimeStamp = true)
+        public static void SaveCodeBaseXML(bool NowTimeStamp = true)
         {
             try
             {
@@ -255,7 +247,7 @@ namespace PWDCore
 
                     //配置清单
                     lXmlWriter.WriteStartElement("Setting");
-                    if (UpdateTimeStamp)
+                    if (NowTimeStamp)
                     {
                         lXmlWriter.WriteElementString("TimeStamp", DateTime.Now.ToString("yyyyMMddHHmm"));//时间戳
                     }
@@ -288,6 +280,7 @@ namespace PWDCore
                         {
                             lXmlWriter.WriteStartElement("Unit");//子节点
                             lXmlWriter.WriteElementString("Domin", ManualItemsLst[i].Domin);
+                            lXmlWriter.WriteElementString("TimeStamp", ManualItemsLst[i].TimeStamp);
                             lXmlWriter.WriteElementString("PWDPool", ManualItemsLst[i].PWDPool);
                             lXmlWriter.WriteElementString("Length", ManualItemsLst[i].Length.ToString());
                             lXmlWriter.WriteElementString("MD5Times", ManualItemsLst[i].MD5Times.ToString());
@@ -548,54 +541,6 @@ namespace PWDCore
                 }
             }
         }
-
-        /// <summary>
-        /// 查询帐号状态
-        /// </summary>
-        public struct StatuStuct
-        {
-            public bool SignUp;
-            public bool Weixin;
-
-            public bool RefreshDone;
-            public bool Error;
-            public string ErrorStr;
-
-            public void Refresh()
-            {
-                new Thread(new ThreadStart(Thread)).Start();
-            }
-
-            private void Thread()
-            {
-                try
-                {
-                    AccountStatu.RefreshDone = false;
-                    AccountStatu.Error = false;
-
-                    string Src = Functions.GetSource("http://parkssword.sinaapp.com/CheckStatu.php?Email=" + Functions.EmailID + "&CPUID=" + Functions.CPUCodeStr);
-
-                    if (Src.Trim() == "-1") throw new Exception("帐号异地登录，请重新登录。或联系ParkSSword客服（QQ：2715937765）");
-
-                    AccountStatu.SignUp = Src.Substring(0, 1) == "1" ? true : false;
-                    AccountStatu.Weixin = Src.Substring(1, 1) == "1" ? true : false;
-                }
-                catch (Exception E)
-                {
-                    AccountStatu.Error = true;
-                    AccountStatu.ErrorStr = E.Message;
-                }
-                finally
-                {
-                    AccountStatu.RefreshDone = true;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 帐号状态
-        /// </summary>
-        public static StatuStuct AccountStatu;
 
         /// <summary>
         /// 判断是否为Email格式
