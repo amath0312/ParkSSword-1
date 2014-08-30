@@ -88,7 +88,7 @@ namespace parkssword
 
             textBox_Email.Text = Functions.Setting_Default.LoginEmail;
 
-            label_Hard.Text = "[CPUID:" + Functions.CPUCodeStr + " HardID:" + Functions.HardCodeStr + " USBID:" + Functions.USBCodeStr + "]";
+            textBox_Hard.Text = "[CPUID:" + Functions.CPUCodeStr + " HardID:" + Functions.HardCodeStr + " USBID:" + Functions.USBCodeStr + "]";
         }
 
         private void ReloadSettingsAndUnits()
@@ -424,7 +424,10 @@ namespace parkssword
                 string PostData = LoadManualItems2StrData();
 
                 byte[] byteArray = Encoding.GetEncoding("gb2312").GetBytes(PostData);
-                HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(new Uri("http://pss.codeeer.com/StrFresh.php?Email=" + textBox_Email.Text + "&PassWord=" + MD5.PasswordFormat(textBox_Pass.Text) + "&DeviceID=Windows:" + Functions.CPUCodeStr));
+                string TargetUrl = "http://pss.codeeer.com/StrFresh.php?Email=" + textBox_Email.Text + "&PassWord=" + MD5.PasswordFormat(textBox_Pass.Text) + "&DeviceID=Windows:" + Functions.CPUCodeStr;
+
+                Console.WriteLine("提交Url：" + TargetUrl);
+                HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(new Uri(TargetUrl));
 
                 webReq.Method = "POST";
                 webReq.ContentType = "application/octet-stream";
@@ -438,6 +441,7 @@ namespace parkssword
                         using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("gb2312")))
                         {
                             Src = sr.ReadToEnd();
+                            Console.WriteLine("数据库返回：" + Src);
                         }
                     }
                 }
@@ -470,7 +474,7 @@ namespace parkssword
 
                     Functions.ManualItemsLst.Clear();
 
-                    foreach(Match Mc in matcher_Unit)
+                    foreach (Match Mc in matcher_Unit)
                     {
                         //写入Functions.ManualItemsLst列表
                         Functions.ManualItems FM = new Functions.ManualItems();

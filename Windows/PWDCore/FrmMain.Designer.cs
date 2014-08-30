@@ -40,6 +40,7 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
@@ -72,7 +73,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label_Hard = new System.Windows.Forms.Label();
+            this.textBox_Hard = new System.Windows.Forms.TextBox();
             this.label_BBS = new System.Windows.Forms.Label();
             this.label_Pass = new System.Windows.Forms.Label();
             this.textBox_Pass = new System.Windows.Forms.TextBox();
@@ -90,7 +91,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button_MeFocus = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -199,6 +199,11 @@
             // 
             this.columnHeader7.Text = "U盘";
             this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "TimeStamp";
+            this.columnHeader8.Width = 0;
             // 
             // toolStrip1
             // 
@@ -586,24 +591,20 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label_Hard);
-            this.groupBox1.Location = new System.Drawing.Point(43, 202);
+            this.groupBox1.Controls.Add(this.textBox_Hard);
+            this.groupBox1.Location = new System.Drawing.Point(43, 195);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(419, 41);
+            this.groupBox1.Size = new System.Drawing.Size(419, 47);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "硬件信息清单";
             // 
-            // label_Hard
+            // textBox_Hard
             // 
-            this.label_Hard.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Hard.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label_Hard.Location = new System.Drawing.Point(5, 16);
-            this.label_Hard.Name = "label_Hard";
-            this.label_Hard.Size = new System.Drawing.Size(408, 19);
-            this.label_Hard.TabIndex = 0;
-            this.label_Hard.Text = "[]";
-            this.label_Hard.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.textBox_Hard.Location = new System.Drawing.Point(6, 17);
+            this.textBox_Hard.Name = "textBox_Hard";
+            this.textBox_Hard.Size = new System.Drawing.Size(407, 23);
+            this.textBox_Hard.TabIndex = 0;
             // 
             // label_BBS
             // 
@@ -773,11 +774,6 @@
             this.imageList1.Images.SetKeyName(1, "1377781687_exclamation-circle_red.png");
             this.imageList1.Images.SetKeyName(2, "1367994071_onebit_36.png");
             // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "TimeStamp";
-            this.columnHeader8.Width = 0;
-            // 
             // FrmSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -817,6 +813,7 @@
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -887,7 +884,7 @@
         private System.Windows.Forms.Button button_SignUp;
         private System.Windows.Forms.Label label_BBS;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label_Hard;
         private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.TextBox textBox_Hard;
     }
 }

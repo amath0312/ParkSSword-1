@@ -35,7 +35,11 @@ if(isset($Email) && isset($PassWord))
 			//加载服务器StrData数据
 			$StrDataFromServer=$mysql->getData("SELECT StrData FROM PSS_User WHERE Email='$Email' AND PassWord='$PassWord'");
 			$StrDataFromServer=$StrDataFromServer[0]["StrData"];
-			if($StrDataFromServer!=""){$StrDataFromServer=base64_decode($StrDataFromServer);}
+			try
+			{
+				$StrDataFromServer=base64_decode($StrDataFromServer);
+			}
+			catch (Exception $e){}
 
 			preg_match_all($DataFormat, $StrDataFromServer, $ServerData);
 			preg_match_all($DataFormat_Setting, $StrDataFromServer, $ServerData_Setting);

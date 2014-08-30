@@ -348,7 +348,7 @@ public class MainActivity extends Activity implements TextWatcher {
     public void Logoff(MenuItem item) throws Exception {
         HandleDB.Account.Logout(sh);
 
-        Toast.makeText(getBaseContext(),"注销成功",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"注销成功",Toast.LENGTH_LONG).show();
     }
 
     //同步数据

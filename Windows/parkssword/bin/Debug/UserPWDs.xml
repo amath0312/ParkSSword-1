@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="gb2312"?>
 <ManualPWDs>
   <Setting>
-    <TimeStamp>201408289999</TimeStamp>
+    <TimeStamp>201408301401</TimeStamp>
     <Length_Manual>8</Length_Manual>
     <MD5Times_Manual>8</MD5Times_Manual>
     <LockCPU_Manual>True</LockCPU_Manual>
     <LockHard_Manual>False</LockHard_Manual>
     <LockUSB_Manual>False</LockUSB_Manual>
     <Length_Default>8</Length_Default>
-    <MD5Times_Default>10</MD5Times_Default>
+    <MD5Times_Default>8</MD5Times_Default>
     <LockCPU_Default>True</LockCPU_Default>
     <LockHard_Default>False</LockHard_Default>
     <LockUSB_Default>False</LockUSB_Default>
-    <LoginEmail>codeeer@qq.com</LoginEmail>
+    <LoginEmail />
   </Setting>
-  <Unit>
-    <Domin>codeeer.com</Domin>
-    <TimeStamp>201408291751</TimeStamp>
-    <PWDPool>1111100000</PWDPool>
-    <Length>8</Length>
-    <MD5Times>8</MD5Times>
-    <LockCPU>True</LockCPU>
-    <LockHard>True</LockHard>
-    <LockUSB>False</LockUSB>
-  </Unit>
 </ManualPWDs>
