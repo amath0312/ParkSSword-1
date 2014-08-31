@@ -55,12 +55,12 @@ public class SettingHardInfo extends ActionBarActivity {
     };
 
     public void Button_SaveHardInfo(View view) {
+        BT_Save.setEnabled(false);
         Functions.CPUCodeStr=ET_CPU.getText().toString();
         Functions.HardCodeStr=ET_Hard.getText().toString();
         Functions.USBCodeStr=ET_USB.getText().toString();
 
         SqliteHelper sh = new SqliteHelper(SettingHardInfo.this);
         HandleDB.RefreshHardInfo2Sqlite(sh);
-        BT_Save.setEnabled(false);
     }
 }

@@ -80,6 +80,10 @@ if(isset($Email) && isset($PassWord))
 				//比对Setting
 				$NewSetting = "";
 
+				echo "[Setting1:".$AndroidData_Setting[1][0]."]";
+				echo "[Setting2:".$ServerData_Setting[1][0]."]";
+
+
 				if($AndroidData_Setting[1][0]>$ServerData_Setting[1][0])
 				{
 					$NewSetting=$AndroidData_Setting[0][0];
@@ -88,6 +92,8 @@ if(isset($Email) && isset($PassWord))
 				{
 					$NewSetting=$ServerData_Setting[0][0];
 				}
+
+				echo "[SettingChoose:".$NewSetting."]";
 
 				//合并生成新数组
 				$NewData = array_merge($AndroidData,$ServerData);

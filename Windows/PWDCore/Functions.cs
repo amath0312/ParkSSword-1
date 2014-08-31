@@ -49,29 +49,15 @@ namespace PWDCore
         /// </summary>
         public const string UserPWDsPath = @"\UserPWDs.xml";
 
-        /// <summary>
-        /// 设定（默认）
-        /// </summary>
-        public static class Setting_Default
-        {
-            public static int Length = 8;
-            public static int MD5Times = 8;
-            public static bool LockCPU = true;
-            public static bool LockHard = false;
-            public static bool LockUSB = false;
-
-            public static string TimeStamp = "";//时间戳
-            public static string LoginEmail = "";//登录Email
-
-            public static string CloudyTime = "";//云同步时间
-            public static int UpdateSinceLstCloudy = 0;//记录自从上次云同步以来更新的数据条目
-        }
 
         /// <summary>
-        /// 设定（手动）
+        /// 默认生成参数设定
         /// </summary>
         public static class Setting_Manual
         {
+            public static string TimeStamp = "";//时间戳
+            public static string LoginEmail = "";//登录Email
+
             public static int Length = 8;
             public static int MD5Times = 8;
             public static bool LockCPU = true;
@@ -161,7 +147,7 @@ namespace PWDCore
                     Lst = ItemList[0].ChildNodes;
 
                     //获取时间戳
-                    Setting_Default.TimeStamp = Lst[0].InnerText;
+                    Setting_Manual.TimeStamp = Lst[0].InnerText;
 
                     try
                     {
@@ -172,13 +158,7 @@ namespace PWDCore
                         Functions.Setting_Manual.LockHard = Convert.ToBoolean(Lst[4].InnerText);
                         Functions.Setting_Manual.LockUSB = Convert.ToBoolean(Lst[5].InnerText);
 
-                        Functions.Setting_Default.Length = Convert.ToInt16(Lst[6].InnerText);
-                        Functions.Setting_Default.MD5Times = Convert.ToInt16(Lst[7].InnerText);
-                        Functions.Setting_Default.LockCPU = Convert.ToBoolean(Lst[8].InnerText);
-                        Functions.Setting_Default.LockHard = Convert.ToBoolean(Lst[9].InnerText);
-                        Functions.Setting_Default.LockUSB = Convert.ToBoolean(Lst[10].InnerText);
-
-                        Functions.Setting_Default.LoginEmail = Lst[11].InnerText;
+                        Functions.Setting_Manual.LoginEmail = Lst[6].InnerText;
                     }
                     catch
                     { 
@@ -192,13 +172,7 @@ namespace PWDCore
                     Functions.Setting_Manual.LockHard = false;
                     Functions.Setting_Manual.LockUSB = false;
 
-                    Functions.Setting_Default.Length = 8;
-                    Functions.Setting_Default.MD5Times = 8;
-                    Functions.Setting_Default.LockCPU = true;
-                    Functions.Setting_Default.LockHard = false;
-                    Functions.Setting_Default.LockUSB = false;
-
-                    Functions.Setting_Default.LoginEmail = "";
+                    Functions.Setting_Manual.LoginEmail = "";
                 }
 
                 //加载用户清单
@@ -247,28 +221,16 @@ namespace PWDCore
 
                     //配置清单
                     lXmlWriter.WriteStartElement("Setting");
-                    if (NowTimeStamp)
-                    {
-                        lXmlWriter.WriteElementString("TimeStamp", DateTime.Now.ToString("yyyyMMddHHmm"));//时间戳
-                    }
-                    else
-                    {
-                        lXmlWriter.WriteElementString("TimeStamp", Setting_Default.TimeStamp);//时间戳
-                    }
 
+                    if (NowTimeStamp) Setting_Manual.TimeStamp = DateTime.Now.ToString("yyyyMMddHHmm");
+
+                    lXmlWriter.WriteElementString("TimeStamp", Setting_Manual.TimeStamp);//时间戳
                     lXmlWriter.WriteElementString("Length_Manual", Functions.Setting_Manual.Length.ToString());//Length
                     lXmlWriter.WriteElementString("MD5Times_Manual", Functions.Setting_Manual.MD5Times.ToString());//MD5Times
                     lXmlWriter.WriteElementString("LockCPU_Manual", Functions.Setting_Manual.LockCPU.ToString());//LockCPU
                     lXmlWriter.WriteElementString("LockHard_Manual", Functions.Setting_Manual.LockHard.ToString());//LockHard
                     lXmlWriter.WriteElementString("LockUSB_Manual", Functions.Setting_Manual.LockUSB.ToString());//LockUSB
-
-                    lXmlWriter.WriteElementString("Length_Default", Functions.Setting_Default.Length.ToString());//Length
-                    lXmlWriter.WriteElementString("MD5Times_Default", Functions.Setting_Default.MD5Times.ToString());//MD5Times
-                    lXmlWriter.WriteElementString("LockCPU_Default", Functions.Setting_Default.LockCPU.ToString());//LockCPU
-                    lXmlWriter.WriteElementString("LockHard_Default", Functions.Setting_Default.LockHard.ToString());//LockHard
-                    lXmlWriter.WriteElementString("LockUSB_Default", Functions.Setting_Default.LockUSB.ToString());//LockUSB
-
-                    lXmlWriter.WriteElementString("LoginEmail", Functions.Setting_Default.LoginEmail);//登录Email
+                    lXmlWriter.WriteElementString("LoginEmail", Functions.Setting_Manual.LoginEmail);//登录Email
 
                     lXmlWriter.WriteEndElement();//节点关闭
 
@@ -431,18 +393,18 @@ namespace PWDCore
                 }
                 else
                 {
-                    if (Functions.Setting_Default.LockCPU && CPUCodeStr == null)
+                    if (Functions.Setting_Manual.LockCPU && CPUCodeStr == null)
                     {
                         throw new Exception("无法读取CPU序列号");
                     }
 
-                    if (Functions.Setting_Default.LockHard && HardCodeStr == null)
+                    if (Functions.Setting_Manual.LockHard && HardCodeStr == null)
                     {
                         throw new Exception("无法读取硬盘序列号");
                     }
 
                     //获取USB密钥数据
-                    if (Functions.Setting_Default.LockUSB && USBCodeStr == null)
+                    if (Functions.Setting_Manual.LockUSB && USBCodeStr == null)
                     {
                         Functions.GetUSBKeys();
                         if (USBCodeStr == null)
@@ -455,18 +417,18 @@ namespace PWDCore
                     //混合参数箱子
                     StringBuilder MixStr = new StringBuilder(TempStr);
 
-                    if (Functions.Setting_Default.LockCPU) MixStr.Append(CPUCodeStr);
-                    if (Functions.Setting_Default.LockHard) MixStr.Append(HardCodeStr);
-                    if (Functions.Setting_Default.LockUSB) MixStr.Append(USBCodeStr);
+                    if (Functions.Setting_Manual.LockCPU) MixStr.Append(CPUCodeStr);
+                    if (Functions.Setting_Manual.LockHard) MixStr.Append(HardCodeStr);
+                    if (Functions.Setting_Manual.LockUSB) MixStr.Append(USBCodeStr);
 
-                    Console.WriteLine(Functions.Setting_Default.LockCPU + "->" + CPUCodeStr);
-                    Console.WriteLine(Functions.Setting_Default.LockHard + "->" + HardCodeStr);
-                    Console.WriteLine(Functions.Setting_Default.LockUSB + "->" + USBCodeStr);
+                    Console.WriteLine(Functions.Setting_Manual.LockCPU + "->" + CPUCodeStr);
+                    Console.WriteLine(Functions.Setting_Manual.LockHard + "->" + HardCodeStr);
+                    Console.WriteLine(Functions.Setting_Manual.LockUSB + "->" + USBCodeStr);
 
                     Console.WriteLine("MixStr:" + MixStr);
 
-                    string Temp01 = MD5.Bit32(MixStr.ToString()).Substring(0, Functions.Setting_Default.Length).ToUpper();
-                    string Temp02 = MD5.Bit32(Temp01 + MixStr.ToString()).Substring(0, Functions.Setting_Default.Length).ToLower();
+                    string Temp01 = MD5.Bit32(MixStr.ToString()).Substring(0, Functions.Setting_Manual.Length).ToUpper();
+                    string Temp02 = MD5.Bit32(Temp01 + MixStr.ToString()).Substring(0, Functions.Setting_Manual.Length).ToLower();
 
                     TempStr = Temp01 + ":" + Temp02;
                     Console.WriteLine("TempStr->" + TempStr);

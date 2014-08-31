@@ -79,10 +79,10 @@ public class ManualPassword extends ActionBarActivity {
         SB_1.setProgress(8);
         SB_2.setProgress(8);
 
-        //对已经存在于手动列表中的数据进行取值
         Functions.ManualItems data = null;
         data = HandleDB.ManualList.LoadManualItem(sh, domin);
         if(data!=null){
+            //对已经存在于手动列表中的数据进行取值
             S_1.setChecked(data.LockCPU);
             S_2.setChecked(data.LockHard);
             S_3.setChecked(data.LockUSB);
@@ -94,6 +94,14 @@ public class ManualPassword extends ActionBarActivity {
 
             BTSave.setTextSize(10);
             BTSave.setText(Functions.CreatCore(ET.getText().toString()));
+        }
+        else{
+            //对于新创建的采用默认配置
+            S_1.setChecked(Functions.Setting_Default.LockCPU);
+            S_2.setChecked(Functions.Setting_Default.LockHard);
+            S_3.setChecked(Functions.Setting_Default.LockUSB);
+            SB_1.setProgress(Functions.Setting_Default.Length);
+            SB_2.setProgress(Functions.Setting_Default.MD5Times);
         }
 
         SB_1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

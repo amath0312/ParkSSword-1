@@ -12,6 +12,10 @@
         app:showAsAction="never"
         android:onClick="DoSynchro"/>
     <item
+        android:title="密码结构"
+        app:showAsAction="never"
+        android:onClick="PasswordStructSetting"/>
+    <item
         android:title="设置硬件参数"
         app:showAsAction="never"
         android:onClick="SettingHardInfo"/>

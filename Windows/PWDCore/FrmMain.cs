@@ -23,10 +23,6 @@ namespace parkssword
 
             //加载Change事件
             numericUpDown1.ValueChanged += ChangedChanged;
-            numericUpDown3.ValueChanged += ChangedChanged;
-            checkBox1.CheckedChanged += ChangedChanged;
-            checkBox2.CheckedChanged += ChangedChanged;
-            checkBox3.CheckedChanged += ChangedChanged;
             checkBox6.CheckedChanged += ChangedChanged;
             checkBox8.CheckedChanged += ChangedChanged;
             checkBox9.CheckedChanged += ChangedChanged;
@@ -86,7 +82,7 @@ namespace parkssword
             button_SignUp.Click += delegate(object sender, EventArgs e) { FrmSignUp Fsu = new FrmSignUp(); Fsu.ShowDialog(); };
             button_ForgetPWD.Click += delegate(object sender, EventArgs e) { FrmForgetPWD FfPWD = new FrmForgetPWD(); FfPWD.ShowDialog(); };
 
-            textBox_Email.Text = Functions.Setting_Default.LoginEmail;
+            textBox_Email.Text = Functions.Setting_Manual.LoginEmail;
 
             textBox_Hard.Text = "[CPUID:" + Functions.CPUCodeStr + " HardID:" + Functions.HardCodeStr + " USBID:" + Functions.USBCodeStr + "]";
         }
@@ -118,11 +114,6 @@ namespace parkssword
             checkBox6.Checked = Functions.Setting_Manual.LockCPU;
             checkBox8.Checked = Functions.Setting_Manual.LockHard;
             checkBox9.Checked = Functions.Setting_Manual.LockUSB;
-
-            numericUpDown3.Value = Functions.Setting_Default.Length;
-            checkBox3.Checked = Functions.Setting_Default.LockCPU;
-            checkBox2.Checked = Functions.Setting_Default.LockHard;
-            checkBox1.Checked = Functions.Setting_Default.LockUSB;
         }
 
         /// <summary>
@@ -333,7 +324,7 @@ namespace parkssword
         /// <summary>
         /// 保存设定
         /// </summary>
-        void SaveSettingS(bool UpdateTimeStamp = true)
+        void SaveSettingSFromUI(bool UpdateTimeStamp = true)
         {
             Functions.Setting_Manual.Length = Convert.ToInt16(numericUpDown1.Value);
             Functions.Setting_Manual.MD5Times = Convert.ToInt16(numericUpDown2.Value);
@@ -341,19 +332,15 @@ namespace parkssword
             Functions.Setting_Manual.LockHard = Convert.ToBoolean(checkBox8.Checked);
             Functions.Setting_Manual.LockUSB = Convert.ToBoolean(checkBox9.Checked);
 
-            Functions.Setting_Default.Length = Convert.ToInt16(numericUpDown3.Value);
-            Functions.Setting_Default.LockCPU = Convert.ToBoolean(checkBox3.Checked);
-            Functions.Setting_Default.LockHard = Convert.ToBoolean(checkBox2.Checked);
-            Functions.Setting_Default.LockUSB = Convert.ToBoolean(checkBox1.Checked);
-
-            Functions.Setting_Default.LoginEmail = textBox_Email.Text;
+            Functions.Setting_Manual.LoginEmail = textBox_Email.Text;
 
             Functions.SaveCodeBaseXML(UpdateTimeStamp);
+            button_SaveSetting.Enabled = false;
         }
 
         private void button_SaveSetting_Click(object sender, EventArgs e)
         {
-            SaveSettingS();
+            SaveSettingSFromUI();
         }
 
         void ChangedChanged(object sender, EventArgs e)
@@ -367,7 +354,7 @@ namespace parkssword
             {
                 if (DialogResult.Yes == MessageBox.Show("已经更改了设置，是否保存？", "询问", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
                 {
-                    SaveSettingS();
+                    SaveSettingSFromUI();
                 }
             }
         }
@@ -380,7 +367,7 @@ namespace parkssword
             if (textBox_Email.Text.Trim() == "") throw new Exception("请输入帐号");
             if (textBox_Pass.Text == "") throw new Exception("请输入密码");
 
-            Functions.Setting_Default.LoginEmail = textBox_Email.Text;
+            Functions.Setting_Manual.LoginEmail = textBox_Email.Text;
             Thread oThread = new Thread(new ThreadStart(SynchronizationThread));
             oThread.IsBackground = true;
             oThread.Start();
@@ -389,11 +376,11 @@ namespace parkssword
         //转换列表为String格式用于Post
         public static string LoadManualItems2StrData()
         {
-            StringBuilder SB = new StringBuilder("#Setting#@" + Functions.Setting_Default.TimeStamp
-                    + "#@#" + Functions.Setting_Default.Length + "#@#" + Functions.Setting_Default.MD5Times
-                    + "#@#" + Functions.Setting_Default.LockCPU
-                    + "#@#" + Functions.Setting_Default.LockHard
-                    + "#@#" + Functions.Setting_Default.LockUSB
+            StringBuilder SB = new StringBuilder("#Setting#@" + Functions.Setting_Manual.TimeStamp
+                    + "#@#" + Functions.Setting_Manual.Length + "#@#" + Functions.Setting_Manual.MD5Times
+                    + "#@#" + Functions.Setting_Manual.LockCPU
+                    + "#@#" + Functions.Setting_Manual.LockHard
+                    + "#@#" + Functions.Setting_Manual.LockUSB
                     + "@#Setting#");
 
             List<Functions.ManualItems> Lst2Str = Functions.ManualItemsLst;
@@ -458,14 +445,14 @@ namespace parkssword
                     Regex pattern_Setting = new Regex("#Setting#@(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)#@#(.*?)@#Setting#");
                     MatchCollection matcher_Setting = pattern_Setting.Matches(Src);
 
-                    if (matcher_Setting.Count == 1)
+                    if (matcher_Setting.Count > 0)
                     {
-                        Functions.Setting_Default.TimeStamp = matcher_Setting[0].Groups[1].Value;
-                        Functions.Setting_Default.Length = Convert.ToInt16(matcher_Setting[0].Groups[2].Value);
-                        Functions.Setting_Default.MD5Times = Convert.ToInt16(matcher_Setting[0].Groups[3].Value);
-                        Functions.Setting_Default.LockCPU = Convert.ToBoolean(matcher_Setting[0].Groups[4].Value);
-                        Functions.Setting_Default.LockHard = Convert.ToBoolean(matcher_Setting[0].Groups[5].Value);
-                        Functions.Setting_Default.LockUSB = Convert.ToBoolean(matcher_Setting[0].Groups[6].Value);
+                        Functions.Setting_Manual.TimeStamp = matcher_Setting[0].Groups[1].Value;
+                        Functions.Setting_Manual.Length = Convert.ToInt16(matcher_Setting[0].Groups[2].Value);
+                        Functions.Setting_Manual.MD5Times = Convert.ToInt16(matcher_Setting[0].Groups[3].Value);
+                        Functions.Setting_Manual.LockCPU = Convert.ToBoolean(matcher_Setting[0].Groups[4].Value);
+                        Functions.Setting_Manual.LockHard = Convert.ToBoolean(matcher_Setting[0].Groups[5].Value);
+                        Functions.Setting_Manual.LockUSB = Convert.ToBoolean(matcher_Setting[0].Groups[6].Value);
                     }
                     else
                     {
@@ -490,6 +477,9 @@ namespace parkssword
                         Functions.ManualItemsLst.Add(FM);
                     }
 
+                    //保存和重新加载设定
+                    ReloadSettingsAndUnits();
+                    SaveSettingSFromUI(false);//这两个顺序不能打乱，不然新数据会被UI层的刷掉 # #!
                     label_BBS.Text = "同步成功 " + DateTime.Now.ToString("HH:mm:ss");
                 }
                 else if (Src.IndexOf("Wrong UserName or Password!") == 0)
@@ -501,7 +491,7 @@ namespace parkssword
                     throw new Exception("数据同步失败（" + Src.Length + "）");
                 }
 
-                SaveSettingS(false);
+                SaveSettingSFromUI(false);
 
                 ReloadSettingsAndUnits();
             }

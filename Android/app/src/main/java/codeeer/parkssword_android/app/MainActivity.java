@@ -281,7 +281,7 @@ public class MainActivity extends Activity implements TextWatcher {
                             handler.post(runnableUi);
                             String urlsource = PostData(url, HandleDB.ManualList.LoadManualItems2StrData());
 
-                            if(!urlsource.contains("#Head#")||!urlsource.contains("#Tail#")){throw new Exception("数据校验错误"); }
+                            if(!urlsource.contains("#Head#")||!urlsource.contains("#Tail#")){throw new Exception("无法获取服务端数据"); }
 
                             //处理数据
                             content = Source2Sqlite(urlsource, sh);
@@ -365,11 +365,16 @@ public class MainActivity extends Activity implements TextWatcher {
 
     //设置硬件参数
     public void SettingHardInfo(MenuItem item) {
-
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, SettingHardInfo.class);
         startActivity(intent);
+    }
 
+    //密码结构设定
+    public void PasswordStructSetting(MenuItem item) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this,SettingPasswordFormat.class);
+        startActivity(intent);
     }
 
 

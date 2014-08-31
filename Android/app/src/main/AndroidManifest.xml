@@ -48,6 +48,10 @@
             android:name=".SettingHardInfo"
             android:label="硬件参数设定" >
         </activity>
+        <activity
+            android:name=".SettingPasswordFormat"
+            android:label="密码结构设定" >
+        </activity>
     </application>
 
 </manifest>

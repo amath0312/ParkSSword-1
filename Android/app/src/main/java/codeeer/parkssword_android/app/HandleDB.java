@@ -47,6 +47,21 @@ public class HandleDB {
         db.execSQL("UPDATE Setting SET Value = '" + Functions.USBCodeStr + "' WHERE Key = 'USBID'");
     }
 
+    //刷新密码结构设定
+    public static void RefreshPasswordStruct2Sqlite(SqliteHelper sh){
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
+        String NowTimeStamp = df.format(new Date());
+
+        SQLiteDatabase db = sh.getWritableDatabase();//TODO 看看bool怎么写进数据库
+        db.execSQL("UPDATE Setting SET Value = '" + NowTimeStamp + "' WHERE Key = 'TimeStamp'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.Setting_Default.Length + "' WHERE Key = 'Length_Default'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.Setting_Default.MD5Times + "' WHERE Key = 'MD5Times_Default'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.Setting_Default.LockCPU + "' WHERE Key = 'LockCPU_Default'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.Setting_Default.LockHard + "' WHERE Key = 'LockHard_Default'");
+        db.execSQL("UPDATE Setting SET Value = '" + Functions.Setting_Default.LockUSB + "' WHERE Key = 'LockUSB_Default'");
+    }
+
     //读取手动列表
     public static class ManualList
     {
